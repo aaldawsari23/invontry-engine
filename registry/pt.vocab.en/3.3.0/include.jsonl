@@ -1,0 +1,10 @@
+{"term": "wheelchair", "score": 40, "category": "mobility", "pt_domain": "mobility_aids"}
+{"term": "treadmill", "score": 35, "category": "gait_training", "pt_domain": "cardio_rehabilitation"}
+{"term": "tens unit", "score": 35, "category": "electrotherapy", "pt_domain": "pain_management"}
+{"term": "ultrasound therapy", "score": 35, "category": "thermal", "pt_domain": "tissue_healing"}
+{"term": "walker", "score": 30, "category": "mobility", "pt_domain": "mobility_aids"}
+{"term": "crutches", "score": 30, "category": "mobility", "pt_domain": "mobility_aids"}
+{"term": "resistance band", "score": 25, "category": "exercise", "pt_domain": "strengthening"}
+{"term": "parallel bars", "score": 25, "category": "gait_training", "pt_domain": "balance_training"}
+{"term": "gait trainer", "score": 30, "category": "gait_training", "pt_domain": "neurological_rehab"}
+{"term": "goniometer", "score": 20, "category": "assessment", "pt_domain": "range_of_motion"}

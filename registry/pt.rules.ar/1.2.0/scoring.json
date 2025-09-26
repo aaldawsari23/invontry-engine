@@ -1,0 +1,46 @@
+{
+  "base_weights": {
+    "mobility_equipment": 40,
+    "therapy_equipment": 35,
+    "assessment_tools": 25,
+    "consumables": 15,
+    "brands": 10
+  },
+  "category_multipliers": {
+    "كرسي متحرك": 1.0,
+    "علاج طبيعي": 0.9,
+    "تأهيل": 0.8,
+    "تمارين": 0.7,
+    "مساعدات حركة": 0.9
+  },
+  "contextual_boosts": {
+    "rehabilitation_context": {
+      "keywords": ["تأهيل", "علاج طبيعي", "استرداد الحركة"],
+      "boost_factor": 1.2
+    },
+    "mobility_context": {
+      "keywords": ["حركة", "مشي", "انتقال", "توازن"],
+      "boost_factor": 1.15
+    },
+    "therapy_context": {
+      "keywords": ["علاج", "تمارين", "تدريب"],
+      "boost_factor": 1.1
+    }
+  },
+  "penalty_rules": {
+    "surgical_penalty": {
+      "keywords": ["جراحة", "عملية", "مشرط"],
+      "penalty_factor": -50
+    },
+    "diagnostic_penalty": {
+      "keywords": ["تشخيص", "فحص", "اشعة"],
+      "penalty_factor": -30
+    }
+  },
+  "thresholds": {
+    "high_confidence": 45,
+    "medium_confidence": 25,
+    "low_confidence": 10,
+    "rejection_threshold": -10
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "l1_categories": [
+    {
+      "id": "equipment_devices",
+      "l1_en": "Equipment & Devices", 
+      "l1_ar": "المعدات والأجهزة",
+      "l2_categories": [
+        {
+          "id": "cardio_exercise", 
+          "l2_en": "Cardio & Exercise Machines",
+          "l2_ar": "أجهزة القلب والتمارين",
+          "body_regions": ["cardiovascular", "general"],
+          "pt_domains": ["cardiopulmonary", "general"]
+        },
+        {
+          "id": "rehab_training",
+          "l2_en": "Rehabilitation Training Equipment", 
+          "l2_ar": "معدات التدريب التأهيلي",
+          "body_regions": ["lower_limb", "upper_limb", "spine"],
+          "pt_domains": ["musculoskeletal", "neurological"]
+        },
+        {
+          "id": "balance_stability",
+          "l2_en": "Balance & Stability Equipment",
+          "l2_ar": "معدات التوازن والاستقرار", 
+          "body_regions": ["vestibular", "lower_limb"],
+          "pt_domains": ["neurological", "geriatric"]
+        },
+        {
+          "id": "mobility_transfer",
+          "l2_en": "Mobility & Transfer Aids",
+          "l2_ar": "مساعدات النقل والحركة",
+          "body_regions": ["general", "lower_limb"],
+          "pt_domains": ["mobility", "general"]
+        }
+      ]
+    },
+    {
+      "id": "modalities",
+      "l1_en": "Modalities",
+      "l1_ar": "العلاجات الفيزيائية", 
+      "l2_categories": [
+        {
+          "id": "electrotherapy",
+          "l2_en": "Electrotherapy",
+          "l2_ar": "العلاج الكهربائي",
+          "body_regions": ["general"],
+          "pt_domains": ["pain_management", "tissue_healing"]
+        },
+        {
+          "id": "thermal_therapy", 
+          "l2_en": "Thermal Therapy",
+          "l2_ar": "العلاج الحراري",
+          "body_regions": ["general"],
+          "pt_domains": ["pain_management", "circulation"]
+        }
+      ]
+    },
+    {
+      "id": "assessment_tools",
+      "l1_en": "Assessment Tools",
+      "l1_ar": "أدوات التقييم",
+      "l2_categories": [
+        {
+          "id": "measurement_tools",
+          "l2_en": "Measurement & Testing Tools", 
+          "l2_ar": "أدوات القياس والاختبار",
+          "body_regions": ["general"],
+          "pt_domains": ["assessment", "evaluation"]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "1.1.0",
+    "total_l1": 3,
+    "total_l2": 7,
+    "supported_domains": ["musculoskeletal", "neurological", "cardiopulmonary", "geriatric", "pediatric"],
+    "supported_regions": ["upper_limb", "lower_limb", "spine", "cardiovascular", "vestibular", "general"]
+  }
+}

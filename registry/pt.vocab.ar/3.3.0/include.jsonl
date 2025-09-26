@@ -1,0 +1,10 @@
+{"term": "كرسي متحرك", "score": 40, "category": "mobility", "pt_domain": "mobility_aids"}
+{"term": "جهاز مشي", "score": 35, "category": "gait_training", "pt_domain": "rehabilitation"}
+{"term": "عكاز", "score": 30, "category": "mobility", "pt_domain": "mobility_aids"}
+{"term": "مشاية", "score": 30, "category": "mobility", "pt_domain": "mobility_aids"}
+{"term": "شريط مقاومة", "score": 25, "category": "exercise", "pt_domain": "strengthening"}
+{"term": "جهاز تحفيز كهربائي", "score": 35, "category": "electrotherapy", "pt_domain": "pain_management"}
+{"term": "جهاز موجات فوق صوتية", "score": 35, "category": "thermal", "pt_domain": "tissue_healing"}
+{"term": "كمادة حارة", "score": 20, "category": "thermal", "pt_domain": "pain_management"}
+{"term": "كمادة باردة", "score": 20, "category": "thermal", "pt_domain": "inflammation"}
+{"term": "قطب كهربائي", "score": 15, "category": "consumable", "pt_domain": "electrotherapy"}

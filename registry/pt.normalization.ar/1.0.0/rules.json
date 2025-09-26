@@ -1,0 +1,35 @@
+{
+  "hamza_rules": {
+    "أ": "ا", "إ": "ا", "آ": "ا", "ء": "",
+    "ؤ": "و", "ئ": "ي"
+  },
+  "letter_variants": {
+    "ي": "ى", "ى": "ي",
+    "ة": "ه", "ه": "ة"
+  },
+  "tashkeel_removal": {
+    "pattern": "[\\u064B-\\u065F\\u0670\\u06D6-\\u06ED]",
+    "replacement": ""
+  },
+  "tatweel_removal": {
+    "ـ": ""
+  },
+  "whitespace_normalization": {
+    "pattern": "\\s+",
+    "replacement": " "
+  },
+  "medical_specific": {
+    "كرسي": "كرسى",
+    "العلاج": "علاج",
+    "التأهيل": "تأهيل",
+    "الطبيعي": "طبيعي"
+  },
+  "processing_order": [
+    "tashkeel_removal",
+    "tatweel_removal", 
+    "hamza_rules",
+    "letter_variants",
+    "medical_specific",
+    "whitespace_normalization"
+  ]
+}

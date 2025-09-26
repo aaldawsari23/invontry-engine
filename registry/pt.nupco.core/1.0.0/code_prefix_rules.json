@@ -1,0 +1,45 @@
+{
+  "prefix_mapping": {
+    "52": {
+      "category": "pharmaceuticals",
+      "pt_relevance": "exclude",
+      "description": "Drugs and medications"
+    },
+    "411": {
+      "category": "laboratory", 
+      "pt_relevance": "exclude",
+      "description": "Laboratory equipment"
+    },
+    "421": {
+      "category": "diagnostic_imaging",
+      "pt_relevance": "exclude", 
+      "description": "Radiology and imaging"
+    },
+    "431": {
+      "category": "rehabilitation_equipment",
+      "pt_relevance": "high",
+      "description": "Physical therapy and rehabilitation"
+    },
+    "432": {
+      "category": "mobility_aids",
+      "pt_relevance": "high",
+      "description": "Mobility and accessibility equipment"
+    },
+    "451": {
+      "category": "exercise_equipment",
+      "pt_relevance": "medium", 
+      "description": "Fitness and exercise equipment"
+    },
+    "461": {
+      "category": "surgical_equipment",
+      "pt_relevance": "exclude",
+      "description": "Surgical instruments and equipment"
+    }
+  },
+  "classification_rules": {
+    "high_pt_relevance": ["431", "432"],
+    "medium_pt_relevance": ["451"],
+    "excluded_categories": ["52", "411", "421", "461"],
+    "requires_manual_review": ["450", "460", "470"]
+  }
+}

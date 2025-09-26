@@ -1,0 +1,22 @@
+{
+  "name": "pt.taxonomy.core",
+  "version": "1.1.0",
+  "description": "Core PT taxonomy with L1/L2 categories and body regions",
+  "type": "taxonomy",
+  "schema_version": "1.0",
+  "created_at": "2025-09-26T00:00:00Z",
+  "dependencies": [],
+  "files": {
+    "categories.json": {
+      "description": "Hierarchical PT categories with multilingual support",
+      "format": "json",
+      "encoding": "utf-8",
+      "checksum": "auto"
+    }
+  },
+  "metadata": {
+    "languages": ["en", "ar"],
+    "regions": ["saudi", "gcc", "international"],
+    "coverage": "comprehensive"
+  }
+}

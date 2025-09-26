@@ -1,0 +1,46 @@
+{
+  "case_folding": {
+    "enabled": true,
+    "method": "lowercase"
+  },
+  "accent_removal": {
+    "à": "a", "á": "a", "â": "a", "ä": "a",
+    "è": "e", "é": "e", "ê": "e", "ë": "e", 
+    "ì": "i", "í": "i", "î": "i", "ï": "i",
+    "ò": "o", "ó": "o", "ô": "o", "ö": "o",
+    "ù": "u", "ú": "u", "û": "u", "ü": "u",
+    "ñ": "n", "ç": "c"
+  },
+  "medical_abbreviations": {
+    "pt": "physiotherapy", "physio": "physiotherapy",
+    "rehab": "rehabilitation", "ortho": "orthopedic",
+    "neuro": "neurological", "peds": "pediatric",
+    "occ": "occupational", "rx": "therapy"
+  },
+  "plural_normalization": {
+    "therapies": "therapy", "exercises": "exercise",
+    "wheelchairs": "wheelchair", "crutches": "crutch",
+    "braces": "brace", "splints": "splint"
+  },
+  "brand_normalization": {
+    "chattanooga": "chattanooga", "btl": "btl",
+    "storz": "storz", "zimmer": "zimmer"
+  },
+  "whitespace_normalization": {
+    "pattern": "\\s+", 
+    "replacement": " "
+  },
+  "special_characters": {
+    "&": "and", "+": "plus", "/": " ",
+    "-": " ", "_": " "
+  },
+  "processing_order": [
+    "case_folding",
+    "accent_removal", 
+    "special_characters",
+    "medical_abbreviations",
+    "brand_normalization",
+    "plural_normalization",
+    "whitespace_normalization"
+  ]
+}

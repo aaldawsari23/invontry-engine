@@ -1,0 +1,36 @@
+{
+  "profile_name": "runtime-full",
+  "description": "Complete PT classification system for enterprise deployment", 
+  "version": "1.0.0",
+  "target_environments": ["server", "enterprise", "desktop"],
+  "packages": {
+    "pt.taxonomy.core": "1.1.0",
+    "pt.normalization.ar": "1.0.0",
+    "pt.normalization.en": "1.0.0", 
+    "pt.vocab.ar": "3.3.0",
+    "pt.vocab.en": "3.3.0",
+    "pt.rules.ar": "1.2.0",
+    "pt.rules.en": "1.2.0",
+    "pt.brands.core": "1.0.0", 
+    "pt.nupco.core": "1.0.0",
+    "pt.graph.core": "1.0.0",
+    "pt.xlang.bridge": "0.2.0"
+  },
+  "runtime_config": {
+    "max_memory_mb": 500,
+    "enable_caching": true,
+    "shard_loading": "eager",
+    "compression": "lz4",
+    "indexing": "full"
+  },
+  "features": {
+    "basic_classification": true,
+    "confidence_scoring": true,
+    "multilingual": true,
+    "advanced_scoring": true,
+    "graph_analysis": true,
+    "nupco_integration": true,
+    "brand_intelligence": true,
+    "contextual_understanding": true
+  }
+}

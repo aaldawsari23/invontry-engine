@@ -1,0 +1,35 @@
+{
+  "profile_name": "runtime-lite",
+  "description": "Minimal PT classification for web/cloud deployment",
+  "version": "1.0.0",
+  "target_environments": ["browser", "cloud", "mobile"],
+  "packages": {
+    "pt.taxonomy.core": "1.1.0",
+    "pt.normalization.ar": "1.0.0", 
+    "pt.normalization.en": "1.0.0",
+    "pt.vocab.ar": {
+      "version": "3.3.0",
+      "shards": ["ك", "ج", "م", "ع", "ت"]
+    },
+    "pt.vocab.en": {
+      "version": "3.3.0", 
+      "shards": ["w", "t", "e", "p", "m"]
+    },
+    "pt.rules.ar": "1.2.0",
+    "pt.rules.en": "1.2.0"
+  },
+  "runtime_config": {
+    "max_memory_mb": 50,
+    "enable_caching": true,
+    "shard_loading": "lazy",
+    "compression": "gzip"
+  },
+  "features": {
+    "basic_classification": true,
+    "confidence_scoring": true,
+    "multilingual": true,
+    "advanced_scoring": false,
+    "graph_analysis": false,
+    "nupco_integration": false
+  }
+}

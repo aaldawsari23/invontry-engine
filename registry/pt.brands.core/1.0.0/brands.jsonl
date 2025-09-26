@@ -1,0 +1,8 @@
+{"brand": "Chattanooga", "categories": ["electrotherapy", "thermal", "traction"], "reputation_score": 95, "country": "USA", "pt_focus": true}
+{"brand": "BTL", "categories": ["electrotherapy", "ultrasound", "shockwave"], "reputation_score": 90, "country": "UK", "pt_focus": true}  
+{"brand": "TheraBand", "categories": ["exercise", "resistance"], "reputation_score": 85, "country": "USA", "pt_focus": true}
+{"brand": "HUR", "categories": ["exercise", "pneumatic"], "reputation_score": 88, "country": "Finland", "pt_focus": true}
+{"brand": "Biodex", "categories": ["assessment", "isokinetic"], "reputation_score": 92, "country": "USA", "pt_focus": true}
+{"brand": "DJO Global", "categories": ["bracing", "cold_therapy"], "reputation_score": 82, "country": "USA", "pt_focus": true}
+{"brand": "Storz Medical", "categories": ["shockwave"], "reputation_score": 89, "country": "Switzerland", "pt_focus": true}
+{"brand": "Zimmer MedizinSysteme", "categories": ["shockwave", "cryotherapy"], "reputation_score": 87, "country": "Germany", "pt_focus": true}
