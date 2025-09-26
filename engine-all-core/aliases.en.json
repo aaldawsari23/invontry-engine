@@ -1,0 +1,21 @@
+
+[
+  { "canonical": "Treadmill", "variants": ["running machine", "walking treadmill", "alterg"], "tags": ["equipment", "gait_training"] },
+  { "canonical": "Stationary Bike", "variants": ["exercise bike", "recumbent bike", "cycle ergometer"], "tags": ["equipment", "cardio"] },
+  { "canonical": "Ultrasound Therapy", "variants": ["therapeutic ultrasound", "ultrasound machine"], "tags": ["modality", "thermal"] },
+  { "canonical": "TENS Unit", "variants": ["tens machine", "transcutaneous electrical nerve stimulation"], "tags": ["modality", "electrotherapy"] },
+  { "canonical": "Electrode", "variants": ["electrodes", "self-adhesive electrode", "e-stim pads"], "tags": ["consumable", "electrotherapy"] },
+  { "canonical": "Resistance Band", "variants": ["theraband", "exercise band", "therapy band", "elastic band"], "tags": ["equipment", "strengthening"] },
+  { "canonical": "Parallel Bars", "variants": ["walking bars", "rehab bars"], "tags": ["equipment", "gait_training"] },
+  { "canonical": "Gait Trainer", "variants": ["body-weight support", "litegait"], "tags": ["equipment", "gait_training", "neuro"] },
+  { "canonical": "Wheelchair", "variants": ["manual wheelchair", "power wheelchair"], "tags": ["mobility", "ADL"] },
+  { "canonical": "Walker", "variants": ["walking frame", "rollator"], "tags": ["mobility", "ADL"] },
+  { "canonical": "Crutches", "variants": ["axillary crutches", "forearm crutches"], "tags": ["mobility", "ADL"] },
+  { "canonical": "Goniometer", "variants": ["goniometry"], "tags": ["assessment", "rom"] },
+  { "canonical": "Dynamometer", "variants": ["hand dynamometer", "grip strength"], "tags": ["assessment", "strength"] },
+  { "canonical": "Hot Pack", "variants": ["hydrocollator pack", "moist heat pack"], "tags": ["modality", "thermal"] },
+  { "canonical": "Cold Pack", "variants": ["ice pack", "cryotherapy pack"], "tags": ["modality", "thermal"] },
+  { "canonical": "Chattanooga", "variants": [], "tags": ["brand"] },
+  { "canonical": "TheraBand", "variants": ["thera-band"], "tags": ["brand"] },
+  { "canonical": "DJO Global", "variants": ["djo"], "tags": ["brand"] }
+]

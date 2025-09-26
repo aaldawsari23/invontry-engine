@@ -1,0 +1,13 @@
+
+[
+  { "canonical": "جهاز مشي", "variants": ["الة المشي", "سير كهربائي"], "tags": ["equipment", "gait_training"] },
+  { "canonical": "كرسي متحرك", "variants": ["عربة متحركة"], "tags": ["mobility", "ADL"] },
+  { "canonical": "عكاز", "variants": ["عكازات"], "tags": ["mobility", "ADL"] },
+  { "canonical": "مشاية", "variants": ["ووكر"], "tags": ["mobility", "ADL"] },
+  { "canonical": "شريط مقاومة", "variants": ["حبل مطاطي", "ثيراباند"], "tags": ["equipment", "strengthening"] },
+  { "canonical": "كمادة حارة", "variants": ["قربة ماء حار"], "tags": ["modality", "thermal"] },
+  { "canonical": "كمادة باردة", "variants": ["قربة ثلج"], "tags": ["modality", "thermal"] },
+  { "canonical": "قطب كهربائي", "variants": ["الكترود", "لاصق كهربائي"], "tags": ["consumable", "electrotherapy"] },
+  { "canonical": "جهاز موجات فوق صوتية", "variants": ["جهاز التراساوند علاجي"], "tags": ["modality", "thermal"] },
+  { "canonical": "جهاز تحفيز كهربائي", "variants": ["جهاز تنس"], "tags": ["modality", "electrotherapy"] }
+]

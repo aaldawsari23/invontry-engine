@@ -1,0 +1,11 @@
+
+{
+  "blockers": [
+    "diagnostic ultrasound", "pacs", "ct scanner", "mri coil", "angiography", "sonography", "radiology", "x-ray",
+    "scalpel", "suture", "hemostat", "bone saw", "laparoscope", "anesthesia machine", "dental chair",
+    "pharmacy", "pharmaceutical", "medication", "drug", "tablet", "capsule", "syrup", "vaccine"
+  ],
+  "demotions": [
+    "diagnostic", "imaging", "probe", "radiography", "lab", "reagent", "printer", "toner"
+  ]
+}

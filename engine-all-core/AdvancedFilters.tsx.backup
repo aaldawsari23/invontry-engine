@@ -1,0 +1,862 @@
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { FilterState, DecisionFilter, AnalysisResult } from '../types';
+import { useTranslation } from './I18n';
+import { Button, Card } from './VisualDesignSystem';
+
+interface AdvancedFiltersProps {
+  filters: FilterState;
+  setFilters: (filters: FilterState | ((f: FilterState) => FilterState)) => void;
+  results?: AnalysisResult[];
+  language?: 'en' | 'ar';
+}
+
+// Enhanced filter state with multi-select and PT scoring
+interface EnhancedFilterState extends FilterState {
+  disciplines: string[];
+  assets: string[];
+  bodyRegions: string[];
+  selectedManufacturers: string[];
+  selectedCountries: string[];
+  selectedSuppliers: string[];
+  selectedModels: string[];
+  ptLikelihood: {
+    min: number;
+    max: number;
+  };
+  showAdvanced: boolean;
+}
+
+// Sub-facet mappings based on asset type
+const ASSET_SUBFACETS: Record<string, string[]> = {
+  'Mobility Aids': ['Wheelchairs', 'Walking Aids', 'Mobility Scooters', 'Transfer Equipment'],
+  'Exercise Equipment': ['Cardio', 'Strength Training', 'Balance Training', 'Flexibility'],
+  'Electrotherapy': ['TENS', 'Ultrasound', 'Laser Therapy', 'Electrical Stimulation'],
+  'Manual Therapy': ['Treatment Tables', 'Positioning Aids', 'Assessment Tools'],
+  'Hydrotherapy': ['Pool Equipment', 'Aquatic Tools', 'Water Safety'],
+  'Respiratory': ['Breathing Exercises', 'Lung Function', 'Airway Clearance'],
+  'Orthopedic': ['Braces', 'Supports', 'Splints', 'Prosthetics'],
+  'Pediatric': ['Development Aids', 'Positioning', 'Sensory Tools'],
+  'Neurological': ['Balance Training', 'Coordination', 'Cognitive Aids'],
+  'Sports Therapy': ['Performance Testing', 'Recovery Tools', 'Athletic Training']
+};
+
+// PT Likelihood scoring algorithm
+const calculatePTLikelihood = (item: AnalysisResult): number => {
+  let score = 50; // Base score
+  
+  // Primary therapy relevance
+  const therapyKeywords = ['therapy', 'rehabilitation', 'physio', 'exercise', 'mobility', 'recovery'];
+  const itemText = (item.item_name + ' ' + item.PT_Category + ' ' + (item.PT_Subcategory || '')).toLowerCase();
+  
+  therapyKeywords.forEach(keyword => {
+    if (itemText.includes(keyword)) score += 15;
+  });
+  
+  // Category-based scoring
+  const highRelevanceCategories = ['Exercise Equipment', 'Mobility Aids', 'Electrotherapy'];
+  const mediumRelevanceCategories = ['Manual Therapy', 'Orthopedic', 'Neurological'];
+  
+  if (highRelevanceCategories.includes(item.PT_Category)) score += 25;
+  else if (mediumRelevanceCategories.includes(item.PT_Category)) score += 15;
+  
+  // Clinical setting indicators
+  if (item.item_name.toLowerCase().includes('clinical') || 
+      item.item_name.toLowerCase().includes('medical') ||
+      item.item_name.toLowerCase().includes('hospital')) {
+    score += 10;
+  }
+  
+  // Existing analysis score integration
+  const analysisBonus = Math.min(item.Score / 10, 20);
+  score += analysisBonus;
+  
+  return Math.min(Math.max(Math.round(score), 0), 100);
+};
+
+export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ 
+  filters, 
+  setFilters, 
+  results = [],
+  language = 'en'
+}) => {
+    const { t } = useTranslation();
+    const [enhancedFilters, setEnhancedFilters] = useState<EnhancedFilterState>({
+        ...filters,
+        disciplines: [],
+        assets: [],
+        bodyRegions: [],
+        selectedManufacturers: [],
+        selectedCountries: [],
+        selectedSuppliers: [],
+        selectedModels: [],
+        ptLikelihood: { min: 0, max: 100 },
+        showAdvanced: false
+    });
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [suggestionIndex, setSuggestionIndex] = useState(-1);
+    const inputRef = useRef<HTMLInputElement>(null);
+    
+    // Load from localStorage on mount
+    useEffect(() => {
+        const saved = localStorage.getItem('ptAnalyzer_filters');
+        if (saved) {
+            try {
+                const parsedFilters = JSON.parse(saved);
+                setEnhancedFilters(prev => ({ ...prev, ...parsedFilters }));
+            } catch (error) {
+                console.warn('Failed to load saved filters:', error);
+            }
+        }
+    }, []);
+    
+    // Save to localStorage when filters change
+    useEffect(() => {
+        localStorage.setItem('ptAnalyzer_filters', JSON.stringify(enhancedFilters));
+    }, [enhancedFilters]);
+
+    // Enhanced filter options with PT likelihood and dynamic facets
+    const filterOptions = useMemo(() => {
+        if (!results.length) return {
+            disciplines: [],
+            assets: [],
+            bodyRegions: [],
+            manufacturers: [],
+            countries: [],
+            suppliers: [],
+            models: [],
+            categories: [],
+            subFacets: {} as Record<string, string[]>
+        };
+        
+        const disciplines = new Set<string>();
+        const assets = new Set<string>();
+        const bodyRegions = new Set<string>();
+        const manufacturers = new Set<string>();
+        const countries = new Set<string>();
+        const suppliers = new Set<string>();
+        const models = new Set<string>();
+        const categories = new Set<string>();
+        
+        // Enhanced data extraction with PT likelihood
+        const resultsWithPT = results.map(result => ({
+            ...result,
+            ptLikelihood: calculatePTLikelihood(result)
+        }));
+        
+        resultsWithPT.forEach(result => {
+            // Extract disciplines (specialty areas)
+            if (result.specialty) disciplines.add(result.specialty);
+            
+            // Extract assets (equipment types)
+            if (result.PT_Category) assets.add(result.PT_Category);
+            
+            // Extract body regions (anatomical focus)
+            if (result.area) bodyRegions.add(result.area);
+            
+            // Vendor information for Advanced modal
+            if (result.manufacturer) manufacturers.add(result.manufacturer);
+            if (result.region) countries.add(result.region); // Assuming region as country
+            if (result.type) suppliers.add(result.type); // Assuming type as supplier info
+            
+            // Extract model information from item names
+            const modelMatch = result.item_name.match(/model\s+([\w\d-]+)/i);
+            if (modelMatch) models.add(modelMatch[1]);
+            
+            if (result.PT_Category) categories.add(result.PT_Category);
+        });
+        
+        // Generate dynamic sub-facets based on selected assets
+        const subFacets: Record<string, string[]> = {};
+        enhancedFilters.assets.forEach(asset => {
+            if (ASSET_SUBFACETS[asset]) {
+                subFacets[asset] = ASSET_SUBFACETS[asset].filter(subfacet => {
+                    // Only show subfacets that have actual results
+                    return resultsWithPT.some(result => 
+                        result.PT_Category === asset && 
+                        (result.PT_Subcategory?.includes(subfacet) || 
+                         result.item_name.toLowerCase().includes(subfacet.toLowerCase()))
+                    );
+                });
+            }
+        });
+        
+        return {
+            disciplines: Array.from(disciplines).sort(),
+            assets: Array.from(assets).sort(),
+            bodyRegions: Array.from(bodyRegions).sort(),
+            manufacturers: Array.from(manufacturers).sort(),
+            countries: Array.from(countries).sort(),
+            suppliers: Array.from(suppliers).sort(),
+            models: Array.from(models).sort(),
+            categories: Array.from(categories).sort(),
+            subFacets
+        };
+    }, [results, enhancedFilters.assets]);
+
+    // Generate suggestions from results
+    const suggestions = useMemo(() => {
+        if (!results.length || !enhancedFilters.text) return [];
+        
+        const query = enhancedFilters.text.toLowerCase();
+        const matches = new Set<string>();
+        
+        results.forEach(result => {
+            // Add item names
+            if (result.item_name.toLowerCase().includes(query)) {
+                matches.add(result.item_name);
+            }
+            // Add categories
+            if (result.PT_Category.toLowerCase().includes(query)) {
+                matches.add(result.PT_Category);
+            }
+            // Add manufacturers
+            if (result.manufacturer && result.manufacturer.toLowerCase().includes(query)) {
+                matches.add(result.manufacturer);
+            }
+            // Add SKUs
+            if (result.sku && result.sku.toLowerCase().includes(query)) {
+                matches.add(result.sku);
+            }
+        });
+        
+        return Array.from(matches)
+            .filter(item => item.toLowerCase() !== query)
+            .slice(0, 6);
+    }, [results, enhancedFilters.text]);
+
+    // Multi-select chip handlers
+    const toggleChip = useCallback((category: keyof EnhancedFilterState, value: string) => {
+        setEnhancedFilters(prev => {
+            const currentArray = prev[category] as string[];
+            const newArray = currentArray.includes(value)
+                ? currentArray.filter(item => item !== value)
+                : [...currentArray, value];
+            return { ...prev, [category]: newArray };
+        });
+    }, []);
+    
+    const removeChip = useCallback((category: keyof EnhancedFilterState, value: string) => {
+        setEnhancedFilters(prev => ({
+            ...prev,
+            [category]: (prev[category] as string[]).filter(item => item !== value)
+        }));
+    }, []);
+    
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setEnhancedFilters(prev => ({ ...prev, [name]: value }));
+        
+        if (name === 'text') {
+            setShowSuggestions(value.length > 0);
+            setSuggestionIndex(-1);
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (!showSuggestions || suggestions.length === 0) return;
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                setSuggestionIndex(prev => 
+                    prev < suggestions.length - 1 ? prev + 1 : 0
+                );
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                setSuggestionIndex(prev => 
+                    prev > 0 ? prev - 1 : suggestions.length - 1
+                );
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (suggestionIndex >= 0 && suggestions[suggestionIndex]) {
+                    setEnhancedFilters(prev => ({ ...prev, text: suggestions[suggestionIndex] }));
+                    setShowSuggestions(false);
+                }
+                break;
+            case 'Escape':
+                setShowSuggestions(false);
+                setSuggestionIndex(-1);
+                break;
+        }
+    };
+
+    const selectSuggestion = (suggestion: string) => {
+        setEnhancedFilters(prev => ({ ...prev, text: suggestion }));
+        setShowSuggestions(false);
+        setSuggestionIndex(-1);
+        inputRef.current?.focus();
+    };
+
+    useEffect(() => {
+        const handleClickOutside = () => {
+            setShowSuggestions(false);
+            setSuggestionIndex(-1);
+        };
+        
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
+    const handleScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        const numValue = value === '' ? (name === 'min' ? -100 : 100) : parseInt(value, 10);
+        setEnhancedFilters(prev => ({
+            ...prev,
+            scoreRange: { ...prev.scoreRange, [name]: numValue },
+        }));
+    };
+    
+    const handlePTLikelihoodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        const numValue = value === '' ? (name === 'min' ? 0 : 100) : parseInt(value, 10);
+        setEnhancedFilters(prev => ({
+            ...prev,
+            ptLikelihood: { ...prev.ptLikelihood, [name]: numValue },
+        }));
+    };
+    
+    const handleFilterChange = (filterType: string, value: string) => {
+        setEnhancedFilters(prev => ({ ...prev, [filterType]: value }));
+    };
+    
+    // Sync enhanced filters with main filters
+    useEffect(() => {
+        const basicFilters = {
+            text: enhancedFilters.text,
+            decision: enhancedFilters.decision,
+            category: enhancedFilters.category,
+            scoreRange: enhancedFilters.scoreRange,
+            manufacturer: enhancedFilters.manufacturer,
+            specialty: enhancedFilters.specialty,
+            region: enhancedFilters.region,
+            area: enhancedFilters.area,
+            type: enhancedFilters.type,
+        };
+        setFilters(basicFilters);
+    }, [enhancedFilters, setFilters]);
+    
+    const decisionFilters: DecisionFilter[] = ['All', 'Accepted', 'Review', 'Rejected'];
+    
+    // Multi-select chip component
+    const MultiSelectChips: React.FC<{
+        label: string;
+        options: string[];
+        selected: string[];
+        onToggle: (value: string) => void;
+        onRemove: (value: string) => void;
+        maxDisplay?: number;
+        rtl?: boolean;
+    }> = ({ label, options, selected, onToggle, onRemove, maxDisplay = 10, rtl = false }) => {
+        const [isExpanded, setIsExpanded] = useState(false);
+        const displayOptions = isExpanded ? options : options.slice(0, maxDisplay);
+        
+        // Get count for each option
+        const getOptionCount = (option: string) => {
+            return results.filter(result => {
+                if (label.includes('Discipline')) return result.specialty === option;
+                if (label.includes('Asset')) return result.PT_Category === option;
+                if (label.includes('Body Region')) return result.area === option;
+                return false;
+            }).length;
+        };
+        
+        return (
+            <div className={`space-y-2 ${rtl ? 'rtl' : 'ltr'}`}>
+                <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-slate-300">
+                        {label} {selected.length > 0 && `(${selected.length})`}
+                    </label>
+                    {options.length > maxDisplay && (
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="text-xs text-teal-400 hover:text-teal-300"
+                        >
+                            {isExpanded ? 'Show Less' : `+${options.length - maxDisplay} more`}
+                        </button>
+                    )}
+                </div>
+                
+                {/* Selected chips */}
+                {selected.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 p-2 bg-slate-900 rounded-lg border border-slate-700">
+                        {selected.map(item => {
+                            const count = getOptionCount(item);
+                            return (
+                                <span
+                                    key={item}
+                                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-teal-600 text-white text-xs font-medium rounded-lg animate-scaleIn"
+                                >
+                                    <span>{item}</span>
+                                    <span className="text-teal-200">({count})</span>
+                                    <button
+                                        onClick={() => onRemove(item)}
+                                        className="ml-1 text-teal-200 hover:text-white transition-colors"
+                                        title="Remove"
+                                    >
+                                        ×
+                                    </button>
+                                </span>
+                            );
+                        })}
+                    </div>
+                )}
+                
+                {/* Available options */}
+                <div className="flex flex-wrap gap-1.5">
+                    {displayOptions.map(option => {
+                        const count = getOptionCount(option);
+                        const isSelected = selected.includes(option);
+                        
+                        if (count === 0) return null;
+                        
+                        return (
+                            <button
+                                key={option}
+                                onClick={() => onToggle(option)}
+                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                                    isSelected
+                                        ? 'bg-teal-600/20 border-teal-500 text-teal-400 hover:bg-teal-600/30'
+                                        : 'bg-slate-800 border-slate-600 text-slate-300 hover:border-slate-500 hover:bg-slate-700'
+                                }`}
+                            >
+                                <span>{option}</span>
+                                <span className="text-xs opacity-75">({count})</span>
+                            </button>
+                        );
+                    })}
+                </div>
+                
+                {/* Dynamic sub-facets for assets */}
+                {label.includes('Asset') && selected.length > 0 && (
+                    <div className="mt-3 p-3 bg-slate-900 rounded-lg border border-slate-700">
+                        <div className="text-xs font-medium text-slate-400 mb-2">Specialized Categories</div>
+                        {selected.map(asset => {
+                            const subFacets = filterOptions.subFacets[asset] || [];
+                            if (subFacets.length === 0) return null;
+                            
+                            return (
+                                <div key={asset} className="mb-2">
+                                    <div className="text-xs text-slate-500 mb-1">{asset}:</div>
+                                    <div className="flex flex-wrap gap-1">
+                                        {subFacets.map(subfacet => (
+                                            <span 
+                                                key={subfacet}
+                                                className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded border border-slate-600"
+                                            >
+                                                {subfacet}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
+    };
+    
+    // Advanced filters modal
+    const AdvancedModal: React.FC<{
+        isOpen: boolean;
+        onClose: () => void;
+        rtl?: boolean;
+    }> = ({ isOpen, onClose, rtl = false }) => {
+        if (!isOpen) return null;
+        
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                <div className={`bg-slate-800 border border-slate-700 rounded-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto ${rtl ? 'rtl' : 'ltr'}`}>
+                    {/* Header */}
+                    <div className="flex items-center justify-between p-6 border-b border-slate-700">
+                        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                            🔧 Advanced Vendor Filters
+                        </h2>
+                        <button
+                            onClick={onClose}
+                            className="text-slate-400 hover:text-white text-xl font-bold transition-colors"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="p-6 space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Manufacturers */}
+                            <MultiSelectChips
+                                label="Manufacturers"
+                                options={filterOptions.manufacturers}
+                                selected={enhancedFilters.selectedManufacturers}
+                                onToggle={(value) => toggleChip('selectedManufacturers', value)}
+                                onRemove={(value) => removeChip('selectedManufacturers', value)}
+                                rtl={rtl}
+                            />
+                            
+                            {/* Countries */}
+                            <MultiSelectChips
+                                label="Countries"
+                                options={filterOptions.countries}
+                                selected={enhancedFilters.selectedCountries}
+                                onToggle={(value) => toggleChip('selectedCountries', value)}
+                                onRemove={(value) => removeChip('selectedCountries', value)}
+                                rtl={rtl}
+                            />
+                            
+                            {/* Suppliers */}
+                            <MultiSelectChips
+                                label="Suppliers"
+                                options={filterOptions.suppliers}
+                                selected={enhancedFilters.selectedSuppliers}
+                                onToggle={(value) => toggleChip('selectedSuppliers', value)}
+                                onRemove={(value) => removeChip('selectedSuppliers', value)}
+                                rtl={rtl}
+                            />
+                            
+                            {/* Models */}
+                            <MultiSelectChips
+                                label="Models"
+                                options={filterOptions.models}
+                                selected={enhancedFilters.selectedModels}
+                                onToggle={(value) => toggleChip('selectedModels', value)}
+                                onRemove={(value) => removeChip('selectedModels', value)}
+                                rtl={rtl}
+                            />
+                        </div>
+                        
+                        {/* Clear vendor filters */}
+                        <div className="pt-4 border-t border-slate-700 flex justify-between">
+                            <button
+                                onClick={() => {
+                                    setEnhancedFilters(prev => ({
+                                        ...prev,
+                                        selectedManufacturers: [],
+                                        selectedCountries: [],
+                                        selectedSuppliers: [],
+                                        selectedModels: []
+                                    }));
+                                }}
+                                className="px-4 py-2 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600 transition-colors"
+                            >
+                                Clear Vendor Filters
+                            </button>
+                            
+                            <Button
+                                variant="primary"
+                                onClick={onClose}
+                            >
+                                Apply Filters
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const FilterButtonGroup: React.FC<{ 
+        label: string; 
+        options: string[]; 
+        activeValue: string; 
+        onSelect: (value: string) => void;
+        colorScheme?: 'default' | 'decision';
+    }> = ({ label, options, activeValue, onSelect, colorScheme = 'default' }) => {
+        if (options.length === 0) return null;
+        
+        const getButtonClass = (option: string, isActive: boolean) => {
+            if (colorScheme === 'decision') {
+                if (option === 'Accepted') {
+                    return `px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                        isActive ? 'bg-green-600 text-white shadow-lg shadow-green-600/25' : 'bg-slate-700 text-slate-300 hover:bg-green-600/20 hover:text-green-400'
+                    }`;
+                } else if (option === 'Review') {
+                    return `px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                        isActive ? 'bg-yellow-600 text-white shadow-lg shadow-yellow-600/25' : 'bg-slate-700 text-slate-300 hover:bg-yellow-600/20 hover:text-yellow-400'
+                    }`;
+                } else if (option === 'Rejected') {
+                    return `px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                        isActive ? 'bg-red-600 text-white shadow-lg shadow-red-600/25' : 'bg-slate-700 text-slate-300 hover:bg-red-600/20 hover:text-red-400'
+                    }`;
+                }
+            }
+            
+            return `px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                isActive 
+                    ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/25' 
+                    : 'bg-slate-700 text-slate-300 hover:bg-teal-600/20 hover:text-teal-400'
+            }`;
+        };
+        
+        return (
+            <div className="space-y-2">
+                <label className="block text-sm font-medium text-slate-400">{label}</label>
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        onClick={() => onSelect('All')}
+                        className={getButtonClass('All', activeValue === 'All')}
+                    >
+                        All
+                    </button>
+                    {options.map(option => (
+                        <button
+                            key={option}
+                            onClick={() => onSelect(option)}
+                            className={getButtonClass(option, activeValue === option)}
+                        >
+                            {option}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    // Count active filters including enhanced ones
+    const activeFiltersCount = useMemo(() => {
+        let count = 0;
+        if (enhancedFilters.text) count++;
+        if (enhancedFilters.disciplines.length > 0) count++;
+        if (enhancedFilters.assets.length > 0) count++;
+        if (enhancedFilters.bodyRegions.length > 0) count++;
+        if (enhancedFilters.selectedManufacturers.length > 0) count++;
+        if (enhancedFilters.selectedCountries.length > 0) count++;
+        if (enhancedFilters.selectedSuppliers.length > 0) count++;
+        if (enhancedFilters.selectedModels.length > 0) count++;
+        if (enhancedFilters.scoreRange.min !== -100 || enhancedFilters.scoreRange.max !== 100) count++;
+        if (enhancedFilters.ptLikelihood.min !== 0 || enhancedFilters.ptLikelihood.max !== 100) count++;
+        return count;
+    }, [enhancedFilters]);
+    
+    const isRTL = language === 'ar';
+
+    // Compact main content - always visible filters in ≤2 rows
+    const compactMainFilters = (
+        <div className={`space-y-4 ${isRTL ? 'rtl' : 'ltr'}`}>
+            {/* Row 1: Search + Quick Filters */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                {/* Smart Search - spans 6 columns */}
+                <div className="lg:col-span-6 relative">
+                    <div className="flex items-center gap-2 mb-2">
+                        <label className="text-sm font-medium text-slate-300">🔍 Smart Search</label>
+                        {enhancedFilters.text && (
+                            <span className="px-2 py-1 bg-teal-600/20 text-teal-400 text-xs rounded-full border border-teal-500/30">
+                                Active
+                            </span>
+                        )}
+                    </div>
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        name="text"
+                        placeholder={isRTL ? "بحث في الأصناف، الشركات، الفئات..." : "Search items, manufacturers, categories..."}
+                        value={enhancedFilters.text}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
+                        onFocus={() => enhancedFilters.text && setShowSuggestions(true)}
+                        className={`w-full p-3 rounded-lg bg-slate-900 border border-slate-600 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white placeholder-slate-400 ${isRTL ? 'text-right' : 'text-left'}`}
+                        autoComplete="off"
+                    />
+                    
+                    {/* Suggestions Dropdown */}
+                    {showSuggestions && suggestions.length > 0 && (
+                        <div className="absolute z-50 w-full mt-1 bg-slate-800 border border-slate-600 rounded-lg shadow-xl max-h-48 overflow-y-auto">
+                            {suggestions.map((suggestion, index) => (
+                                <button
+                                    key={suggestion}
+                                    type="button"
+                                    onClick={() => selectSuggestion(suggestion)}
+                                    className={`w-full px-3 py-2 text-sm hover:bg-slate-700 transition-colors ${
+                                        index === suggestionIndex ? 'bg-slate-700' : ''
+                                    } ${isRTL ? 'text-right' : 'text-left'}`}
+                                >
+                                    <span className="text-white">{suggestion}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                
+                {/* PT Likelihood - spans 3 columns */}
+                <div className="lg:col-span-3">
+                    <div className="flex items-center gap-2 mb-2">
+                        <label className="text-sm font-medium text-slate-300">🎯 PT Likelihood</label>
+                        {(enhancedFilters.ptLikelihood.min !== 0 || enhancedFilters.ptLikelihood.max !== 100) && (
+                            <span className="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded-full border border-green-500/30">
+                                {enhancedFilters.ptLikelihood.min}-{enhancedFilters.ptLikelihood.max}%
+                            </span>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <input 
+                            type="number" 
+                            name="min" 
+                            value={enhancedFilters.ptLikelihood.min} 
+                            onChange={handlePTLikelihoodChange} 
+                            className="w-full p-2 rounded-lg bg-slate-900 border border-slate-600 text-center text-white text-sm"
+                            placeholder="0"
+                            min="0"
+                            max="100"
+                        />
+                        <span className="text-slate-500 text-sm">-</span>
+                        <input 
+                            type="number" 
+                            name="max" 
+                            value={enhancedFilters.ptLikelihood.max} 
+                            onChange={handlePTLikelihoodChange} 
+                            className="w-full p-2 rounded-lg bg-slate-900 border border-slate-600 text-center text-white text-sm"
+                            placeholder="100"
+                            min="0"
+                            max="100"
+                        />
+                    </div>
+                </div>
+                
+                {/* Advanced Modal Button - spans 3 columns */}
+                <div className="lg:col-span-3 flex flex-col justify-end">
+                    <Button
+                        variant="outline"
+                        size="md"
+                        onClick={() => setEnhancedFilters(prev => ({ ...prev, showAdvanced: true }))}
+                        className="w-full"
+                        icon={<span>🔧</span>}
+                        iconPosition="left"
+                    >
+                        {isRTL ? "فلاتر متقدمة" : "Advanced"}
+                        {(enhancedFilters.selectedManufacturers.length + 
+                          enhancedFilters.selectedCountries.length + 
+                          enhancedFilters.selectedSuppliers.length + 
+                          enhancedFilters.selectedModels.length) > 0 && (
+                            <span className="ml-2 px-1.5 py-0.5 bg-teal-600 text-white text-xs rounded-full">
+                                {enhancedFilters.selectedManufacturers.length + 
+                                 enhancedFilters.selectedCountries.length + 
+                                 enhancedFilters.selectedSuppliers.length + 
+                                 enhancedFilters.selectedModels.length}
+                            </span>
+                        )}
+                    </Button>
+                </div>
+            </div>
+            
+            {/* Row 2: Multi-select Chips */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Disciplines */}
+                <MultiSelectChips
+                    label={isRTL ? "التخصصات" : "🎓 Disciplines"}
+                    options={filterOptions.disciplines}
+                    selected={enhancedFilters.disciplines}
+                    onToggle={(value) => toggleChip('disciplines', value)}
+                    onRemove={(value) => removeChip('disciplines', value)}
+                    maxDisplay={8}
+                    rtl={isRTL}
+                />
+                
+                {/* Assets (Equipment Types) */}
+                <MultiSelectChips
+                    label={isRTL ? "الأصول" : "🏥 Assets"}
+                    options={filterOptions.assets}
+                    selected={enhancedFilters.assets}
+                    onToggle={(value) => toggleChip('assets', value)}
+                    onRemove={(value) => removeChip('assets', value)}
+                    maxDisplay={8}
+                    rtl={isRTL}
+                />
+                
+                {/* Body Regions */}
+                <MultiSelectChips
+                    label={isRTL ? "مناطق الجسم" : "🫁 Body Regions"}
+                    options={filterOptions.bodyRegions}
+                    selected={enhancedFilters.bodyRegions}
+                    onToggle={(value) => toggleChip('bodyRegions', value)}
+                    onRemove={(value) => removeChip('bodyRegions', value)}
+                    maxDisplay={8}
+                    rtl={isRTL}
+                />
+            </div>
+        </div>
+    );
+
+    // Clear all filters function
+    const clearAllFilters = () => {
+        setEnhancedFilters({
+            text: '',
+            decision: 'All',
+            category: 'All',
+            scoreRange: { min: -100, max: 100 },
+            manufacturer: 'All',
+            specialty: 'All',
+            region: 'All',
+            area: 'All',
+            type: 'All',
+            disciplines: [],
+            assets: [],
+            bodyRegions: [],
+            selectedManufacturers: [],
+            selectedCountries: [],
+            selectedSuppliers: [],
+            selectedModels: [],
+            ptLikelihood: { min: 0, max: 100 },
+            showAdvanced: false
+        });
+    };
+
+    // Active filters summary
+    const activeFiltersSummary = (
+        <div className="flex items-center justify-between p-3 bg-slate-900 rounded-lg border border-slate-700">
+            <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-slate-300">
+                    {isRTL ? "الفلاتر النشطة:" : "Active Filters:"}
+                </span>
+                <span className="px-2 py-1 bg-teal-600/20 text-teal-400 text-sm rounded-full border border-teal-500/30">
+                    {activeFiltersCount}
+                </span>
+            </div>
+            
+            {activeFiltersCount > 0 && (
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearAllFilters}
+                    className="text-slate-400 hover:text-white"
+                >
+                    {isRTL ? "مسح الكل" : "Clear All"}
+                </Button>
+            )}
+        </div>
+    );
+
+    return (
+        <Card variant="default" padding="lg" className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`}>
+            {/* Header with title and filter count */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-700">
+                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                    {isRTL ? "🔍 نظام الترشيح الذكي" : "🔍 Smart Filter System"}
+                </h3>
+                {activeFiltersCount > 0 && (
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm text-slate-400">
+                            {isRTL ? "فلاتر نشطة:" : "Active:"}
+                        </span>
+                        <span className="px-2 py-1 bg-teal-600 text-white text-sm font-medium rounded-full">
+                            {activeFiltersCount}
+                        </span>
+                    </div>
+                )}
+            </div>
+            
+            {/* Compact Main Filters - Always Visible */}
+            {compactMainFilters}
+            
+            {/* Active Filters Summary */}
+            {activeFiltersCount > 0 && activeFiltersSummary}
+            
+            {/* Advanced Modal */}
+            <AdvancedModal 
+                isOpen={enhancedFilters.showAdvanced}
+                onClose={() => setEnhancedFilters(prev => ({ ...prev, showAdvanced: false }))}
+                rtl={isRTL}
+            />
+        </Card>
+    );
+};

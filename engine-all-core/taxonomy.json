@@ -1,0 +1,63 @@
+
+[
+  {
+    "category": "Equipment & Devices",
+    "subcategories": [
+      "Cardio & Exercise Machines",
+      "Rehabilitation Training Equipment",
+      "Balance & Stability Equipment",
+      "Therapy Gym Equipment",
+      "Exercise Accessories & Therapy Tools",
+      "Hand Therapy & Finger Exercise Tools",
+      "Sensory & Pediatric Therapy Aids",
+      "Treatment Furniture",
+      "Mobility & Transfer Aids",
+      "Daily Living Aids",
+      "Seating & Positioning Equipment",
+      "Robotics & Advanced Systems"
+    ]
+  },
+  {
+    "category": "Modalities",
+    "subcategories": [
+        "Electrotherapy",
+        "Thermal Therapy",
+        "Mechanical Therapy",
+        "Light & Laser Therapy"
+    ]
+  },
+  {
+    "category": "Consumables",
+    "subcategories": [
+        "Tapes & Wraps",
+        "Gels & Lotions",
+        "Electrodes & Wires",
+        "Linens & Covers",
+        "Sanitation & Disinfection"
+    ]
+  },
+  {
+    "category": "Assessment Tools",
+    "subcategories": [
+        "Measurement & Evaluation",
+        "Gait & Motion Analysis",
+        "Strength & ROM Testing"
+    ]
+  },
+  {
+    "category": "Orthotics & Prosthetics",
+    "subcategories": [
+        "Upper Limb Orthotics",
+        "Lower Limb Orthotics",
+        "Spinal Orthotics",
+        "Prosthetics Components"
+    ]
+  },
+  {
+    "category": "Brands",
+    "subcategories": [
+      "Global Brands",
+      "Regional Distributors"
+    ]
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "tag_weights": {
+    "default": 3,
+    "modality": 25,
+    "equipment": 20,
+    "assessment": 18,
+    "orthosis": 18,
+    "prosthetics": 20,
+    "gait_training": 20,
+    "ADL": 15,
+    "mobility": 15,
+    "seating": 15,
+    "brand": 10,
+    "consumable": 8,
+    "strengthening": 7,
+    "post_op": 5,
+    "neuro": 5
+  },
+  "score_modifiers": {
+    "diagnostic_blocker": -100,
+    "demotion_term": -25
+  },
+  "thresholds": {
+    "accept_min_score": 15,
+    "reject_threshold": -5
+  },
+  "category_threshold_overrides": {
+    "Consumables": 10,
+    "Modalities": 18,
+    "Equipment & Devices": 15
+  },
+  "brand_boost": {
+      "chattanooga": 5,
+      "theraband": 4,
+      "djo global": 3
+  },
+  "variant_patterns": {
+    "side": "\\b(left|right|bilateral|universal|يمين|يسار|ثنائي)\\b",
+    "size": "\\b(\\d+(?:\\.\\d+)?\\s*(?:cm|mm|in|inch|ml|mg|sm|mlm|انش|'|\\\")|XXXS|XXS|XS|S|M|L|XL|XXL|XXXL|X-Small|Small|Medium|Large|X-Large|XX-Large|XXX-Large|صغير|متوسط|كبير)\\b",
+    "color": "\\b(Red|Green|Blue|Black|White|Gray|Silver|Yellow|Orange|Purple|Pink|Beige|Tan|أحمر|أخضر|أزرق|أسود|أبيض|رمادي|فضي|أصفر|برتقالي|بنفسجي|وردي|بيج)\\b",
+    "resistance": "\\b(Light|Medium|Heavy|X-Heavy|XX-Heavy|Special Heavy|خفيف|متوسط|ثقيل|ثقيل\\s*جدا)\\b"
+  }
+}
