@@ -1,0 +1,5 @@
+{
+  "name": "PhysioTherapy Inventory Analyzer",
+  "description": "An intelligent tool to upload inventory spreadsheets, analyze items based on physical therapy relevance, and provide a categorized, scored, and filterable report. Designed for quick and accurate inventory assessment for PT clinics.",
+  "requestFramePermissions": []
+}

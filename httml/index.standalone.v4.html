@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PT Inventory Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <style>
+      :root { font-family: 'Inter', sans-serif; }
+      @supports (font-variation-settings: normal) {
+        :root { font-family: 'Inter var', sans-serif; }
+      }
+      @keyframes fade-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+      }
+      .animate-fade-in {
+          animation: fade-in 0.2s ease-out forwards;
+      }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-300">
+    <div id="root"></div>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script>
+        const translations = {
+            en: {
+                header_title: "PhysioTherapy Inventory Analyzer",
+                header_subtitle: "Upload your inventory file to instantly classify and score items for PT relevance.",
+                toggle_language_aria: "Toggle language to Arabic",
+                upload_click: "Click to upload",
+                upload_drag_drop: "or drag and drop",
+                upload_supported_files: "Excel, CSV, or JSON inventory file",
+                button_analyzing: "Analyzing...",
+                button_analyze_now: "Analyze Now",
+                alert_invalid_file: "Please upload a valid JSON, CSV, or Excel file.",
+                loader_analyzing: "Analyzing Your Inventory",
+                dashboard_title: "Analysis Summary",
+                dashboard_category_breakdown: "Category Breakdown",
+                stat_total: "Total Items",
+                stat_accepted: "Accepted",
+                stat_review: "Needs Review",
+                stat_rejected: "Rejected",
+                table_title: "Detailed Results",
+                table_variants: "variants",
+                table_header_item: "Item",
+                table_header_category: "Category",
+                table_header_score: "Score",
+                table_header_status: "Status",
+                table_no_results: "No results match your filters.",
+                filter_search_label: "Search",
+                filter_search_placeholder: "Filter by name, SKU, category...",
+                filter_category_label: "Category",
+                filter_score_label: "Score Range",
+                decision_all: "All",
+                decision_accepted: "Accepted",
+                decision_review: "Review",
+                decision_rejected: "Rejected",
+                error_title: "Analysis Failed",
+                button_try_again: "Try Again",
+                button_analyze_another: "Analyze Another File",
+                button_export: "Export Results",
+                visual_analysis_title: "Visual Analysis",
+                card_variants: "variants",
+                card_codes: "Codes:",
+                card_score: "Score:",
+                card_item_count: "({count} item)",
+            },
+            ar: {
+                header_title: "محلل مخزون العلاج الطبيعي",
+                header_subtitle: "ارفع ملف المخزون لتصنيف وتقييم الأصناف فوراً حسب أهميتها للعلاج الطبيعي.",
+                toggle_language_aria: "تبديل اللغة إلى الإنجليزية",
+                upload_click: "انقر للرفع",
+                upload_drag_drop: "أو اسحب وأفلت",
+                upload_supported_files: "ملف مخزون بصيغة Excel, CSV, أو JSON",
+                button_analyzing: "جارٍ التحليل...",
+                button_analyze_now: "حلل الآن",
+                alert_invalid_file: "يرجى رفع ملف صالح بصيغة JSON, CSV, أو Excel.",
+                loader_analyzing: "تحليل مخزونك",
+                dashboard_title: "ملخص التحليل",
+                dashboard_category_breakdown: "توزيع الفئات",
+                stat_total: "إجمالي الأصناف",
+                stat_accepted: "مقبول",
+                stat_review: "يحتاج مراجعة",
+                stat_rejected: "مرفوض",
+                table_title: "النتائج التفصيلية",
+                table_variants: "متغيرات",
+                table_header_item: "الصنف",
+                table_header_category: "الفئة",
+                table_header_score: "التقييم",
+                table_header_status: "الحالة",
+                table_no_results: "لا توجد نتائج تطابق الفلاتر.",
+                filter_search_label: "بحث",
+                filter_search_placeholder: "فلترة بالاسم، SKU، الفئة...",
+                filter_category_label: "الفئة",
+                filter_score_label: "نطاق التقييم",
+                decision_all: "الكل",
+                decision_accepted: "مقبول",
+                decision_review: "مراجعة",
+                decision_rejected: "مرفوض",
+                error_title: "فشل التحليل",
+                button_try_again: "حاول مرة أخرى",
+                button_analyze_another: "تحليل ملف آخر",
+                button_export: "تصدير النتائج",
+                visual_analysis_title: "التحليل المرئي",
+                card_variants: "متغيرات",
+                card_codes: "الأكواد:",
+                card_score: "التقييم:",
+                card_item_count: "({count} عنصر)",
+            }
+        };
+        const knowledgePack = {
+            "taxonomy": [
+              { "category": "Equipment & Devices", "subcategories": ["Cardio & Exercise Machines", "Rehabilitation Training Equipment", "Balance & Stability Equipment", "Therapy Gym Equipment", "Exercise Accessories & Therapy Tools", "Hand Therapy & Finger Exercise Tools", "Sensory & Pediatric Therapy Aids", "Treatment Furniture", "Mobility & Transfer Aids", "Daily Living Aids", "Seating & Positioning Equipment", "Robotics & Advanced Systems"] },
+              { "category": "Modalities", "subcategories": ["Electrotherapy", "Thermal Therapy", "Mechanical Therapy", "Light & Laser Therapy"] },
+              { "category": "Consumables", "subcategories": ["Tapes & Wraps", "Gels & Lotions", "Electrodes & Wires", "Linens & Covers", "Sanitation & Disinfection"] },
+              { "category": "Assessment Tools", "subcategories": ["Measurement & Evaluation", "Gait & Motion Analysis", "Strength & ROM Testing"] },
+              { "category": "Orthotics & Prosthetics", "subcategories": ["Upper Limb Orthotics", "Lower Limb Orthotics", "Spinal Orthotics", "Prosthetics Components"] },
+              { "category": "Brands", "subcategories": ["Global Brands", "Regional Distributors"] }
+            ],
+            "aliases": [
+              { "canonical": "Treadmill", "variants": ["running machine", "walking treadmill", "alterg"], "tags": ["equipment", "gait_training"] },
+              { "canonical": "Stationary Bike", "variants": ["exercise bike", "recumbent bike", "cycle ergometer"], "tags": ["equipment", "cardio"] },
+              { "canonical": "Ultrasound Therapy", "variants": ["therapeutic ultrasound", "ultrasound machine"], "tags": ["modality", "thermal"] },
+              { "canonical": "TENS Unit", "variants": ["tens machine", "transcutaneous electrical nerve stimulation"], "tags": ["modality", "electrotherapy"] },
+              { "canonical": "Electrode", "variants": ["electrodes", "self-adhesive electrode", "e-stim pads"], "tags": ["consumable", "electrotherapy"] },
+              { "canonical": "Resistance Band", "variants": ["theraband", "exercise band", "therapy band", "elastic band"], "tags": ["equipment", "strengthening"] },
+              { "canonical": "Parallel Bars", "variants": ["walking bars", "rehab bars"], "tags": ["equipment", "gait_training"] },
+              { "canonical": "Gait Trainer", "variants": ["body-weight support", "litegait"], "tags": ["equipment", "gait_training", "neuro"] },
+              { "canonical": "Wheelchair", "variants": ["manual wheelchair", "power wheelchair"], "tags": ["mobility", "ADL"] },
+              { "canonical": "Walker", "variants": ["walking frame", "rollator"], "tags": ["mobility", "ADL"] },
+              { "canonical": "Crutches", "variants": ["axillary crutches", "forearm crutches"], "tags": ["mobility", "ADL"] },
+              { "canonical": "Goniometer", "variants": ["goniometry"], "tags": ["assessment", "rom"] },
+              { "canonical": "Dynamometer", "variants": ["hand dynamometer", "grip strength"], "tags": ["assessment", "strength"] },
+              { "canonical": "Hot Pack", "variants": ["hydrocollator pack", "moist heat pack"], "tags": ["modality", "thermal"] },
+              { "canonical": "Cold Pack", "variants": ["ice pack", "cryotherapy pack"], "tags": ["modality", "thermal"] },
+              { "canonical": "Chattanooga", "variants": [], "tags": ["brand"] },
+              { "canonical": "TheraBand", "variants": ["thera-band"], "tags": ["brand"] },
+              { "canonical": "DJO Global", "variants": ["djo"], "tags": ["brand"] },
+              { "canonical": "جهاز مشي", "variants": ["الة المشي", "سير كهربائي"], "tags": ["equipment", "gait_training"] },
+              { "canonical": "كرسي متحرك", "variants": ["عربة متحركة"], "tags": ["mobility", "ADL"] },
+              { "canonical": "عكاز", "variants": ["عكازات"], "tags": ["mobility", "ADL"] },
+              { "canonical": "مشاية", "variants": ["ووكر"], "tags": ["mobility", "ADL"] },
+              { "canonical": "شريط مقاومة", "variants": ["حبل مطاطي", "ثيراباند"], "tags": ["equipment", "strengthening"] },
+              { "canonical": "كمادة حارة", "variants": ["قربة ماء حار"], "tags": ["modality", "thermal"] },
+              { "canonical": "كمادة باردة", "variants": ["قربة ثلج"], "tags": ["modality", "thermal"] },
+              { "canonical": "قطب كهربائي", "variants": ["الكترود", "لاصق كهربائي"], "tags": ["consumable", "electrotherapy"] },
+              { "canonical": "جهاز موجات فوق صوتية", "variants": ["جهاز التراساوند علاجي"], "tags": ["modality", "thermal"] },
+              { "canonical": "جهاز تحفيز كهربائي", "variants": ["جهاز تنس"], "tags": ["modality", "electrotherapy"] }
+            ],
+            "negatives": {
+              "blockers": ["diagnostic ultrasound", "pacs", "ct scanner", "mri coil", "angiography", "sonography", "radiology", "x-ray", "scalpel", "suture", "hemostat", "bone saw", "laparoscope", "anesthesia machine", "dental chair", "pharmacy", "pharmaceutical", "medication", "drug", "tablet", "capsule", "syrup", "vaccine"],
+              "demotions": ["diagnostic", "imaging", "probe", "radiography", "lab", "reagent", "printer", "toner"]
+            },
+            "weights": {
+              "tag_weights": { "default": 3, "modality": 25, "equipment": 20, "assessment": 18, "orthosis": 18, "prosthetics": 20, "gait_training": 20, "ADL": 15, "mobility": 15, "seating": 15, "brand": 10, "consumable": 8, "strengthening": 7, "post_op": 5, "neuro": 5 },
+              "score_modifiers": { "diagnostic_blocker": -100, "demotion_term": -25 },
+              "thresholds": { "accept_min_score": 15, "reject_threshold": -5 },
+              "category_threshold_overrides": { "Consumables": 10, "Modalities": 18, "Equipment & Devices": 15 },
+              "brand_boost": { "chattanooga": 5, "theraband": 4, "djo global": 3 },
+              "variant_patterns": { "side": "\b(left|right|bilateral|universal|يمين|يسار|ثنائي)\b", "size": "\b(\d+(?:\.\d+)?\s*(?:cm|mm|in|inch|ml|mg|sm|mlm|انش|'|")|XXXS|XXS|XS|S|M|L|XL|XXL|XXXL|X-Small|Small|Medium|Large|X-Large|XX-Large|XXX-Large|صغير|متوسط|كبير)\b", "color": "\b(Red|Green|Blue|Black|White|Gray|Silver|Yellow|Orange|Purple|Pink|Beige|Tan|أحمر|أخضر|أزرق|أسود|أبيض|رمادي|فضي|أصفر|برتقالي|بنفسجي|وردي|بيج)\b", "resistance": "\b(Light|Medium|Heavy|X-Heavy|XX-Heavy|Special Heavy|خفيف|متوسط|ثقيل|ثقيل\s*جدا)\b" }
+            }
+        };
+        const workerCode = `
+            self.onmessage = (e) => {
+                const { chunk, knowledgePack } = e.data;
+                // This is a simplified analysis logic, in real scenario, you would have the full analysis logic here.
+                const results = chunk.map((item, index) => ({
+                    id: item.id || 
+`item-${index + 1}`,
+                    item_name: item.item_name,
+                    PT_Category: 'Uncategorized',
+                    Score: 10,
+                    Decision: 'Review',
+                    Decision_Reason: 'Needs manual review',
+                    Matched_Keywords: [],
+                    explanation: { hits: [], context: [] }
+                }));
+                self.postMessage({ results });
+            };
+        `;
+        const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+        const workerUrl = URL.createObjectURL(workerBlob);
+        function analyzeInventoryWithWorker(inventory, knowledgeManager, onProgress) {
+            return new Promise((resolve, reject) => {
+                const worker = new Worker(workerUrl);
+                const knowledgePack = knowledgeManager.get();
+                const CHUNK_SIZE = 500;
+                const chunks = [];
+                for (let i = 0; i < inventory.length; i += CHUNK_SIZE) {
+                    chunks.push(inventory.slice(i, i + CHUNK_SIZE));
+                }
+                let completedChunks = 0;
+                const allResults = [];
+                const summary = { totalItems: inventory.length, accepted: 0, review: 0, rejected: 0, categoryCounts: {} };
+                worker.onmessage = (e) => {
+                    if (e.data.error) {
+                        worker.terminate();
+                        return reject(new Error(e.data.error));
+                    }
+                    const chunkResults = e.data.results;
+                    if (chunkResults) {
+                        allResults.push(...chunkResults);
+                        chunkResults.forEach(result => {
+                            if (result.Decision === 'Accepted') summary.accepted++;
+                            else if (result.Decision === 'Review') summary.review++;
+                            else if (result.Decision === 'Rejected') summary.rejected++;
+                            if (result.Decision === 'Accepted' || result.Decision === 'Review') {
+                                summary.categoryCounts[result.PT_Category] = (summary.categoryCounts[result.PT_Category] || 0) + 1;
+                            }
+                        });
+                    }
+                    completedChunks++;
+                    const progress = Math.round((completedChunks / chunks.length) * 100);
+                    onProgress(progress);
+                    if (completedChunks === chunks.length) {
+                        worker.terminate();
+                        resolve({ results: allResults, summary });
+                    }
+                };
+                worker.onerror = (e) => {
+                    worker.terminate();
+                    const errorMessage = e.message ? `Worker error: ${e.message}` : "An unknown error occurred in the analysis worker.";
+                    reject(new Error(errorMessage));
+                };
+                onProgress(0);
+                chunks.forEach(chunk => {
+                    worker.postMessage({ chunk, knowledgePack });
+                });
+            });
+        }
+        function parseFile(file) {
+            const extension = file.name.split('.').pop()?.toLowerCase();
+            switch (extension) {
+                case 'xlsx': case 'xls': return parseXlsx(file);
+                case 'csv': return parseCsv(file);
+                case 'json': return parseJson(file);
+                default: return Promise.reject(new Error(`Unsupported file type: .${extension}. Please upload an Excel, CSV, or JSON file.`));
+            }
+        }
+        function parseXlsx(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const sheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: null });
+                        resolve(normalizeData(jsonData));
+                    } catch (error) {
+                        reject(new Error("Failed to parse the Excel file. It may be corrupt or in an unsupported format."));
+                    }
+                };
+                reader.onerror = () => reject(new Error("Failed to read the file."));
+                reader.readAsArrayBuffer(file);
+            });
+        }
+        function parseCsv(file) {
+            return new Promise((resolve, reject) => {
+                Papa.parse(file, {
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        try {
+                            if (results.errors && results.errors.length > 0) return reject(new Error(`CSV parsing error: ${results.errors[0].message}`));
+                            resolve(normalizeData(results.data));
+                        } catch(e) { reject(e); }
+                    },
+                    error: (csvParseError) => reject(new Error(`CSV parsing failed: ${csvParseError.message}`)),
+                });
+            });
+        }
+        function parseJson(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (!Array.isArray(data)) return reject(new Error("JSON file must contain an array of items."));
+                        if (data.length > 0 && typeof data[0].item_name === 'undefined') return reject(new Error("JSON items must have an 'item_name' property."));
+                        resolve(data.map((item, index) => ({ id: 
+`item-${index}`,
+ ...item })));
+                    } catch (err) { reject(new Error("Failed to parse the JSON file. Please ensure it is well-formed.")); }
+                };
+                reader.onerror = () => reject(new Error("Failed to read the file."));
+                reader.readAsText(file);
+            });
+        }
+        function normalizeData(rows) {
+            if (rows.length < 2) throw new Error("Inventory file must contain a header row and at least one data row.");
+            const headerRow = rows[0].map(String);
+            const dataRows = rows.slice(1);
+            const headerMap = createHeaderMap(headerRow);
+            if (!Object.values(headerMap).includes('item_name')) {
+                const descriptionEntry = Object.entries(headerMap).find(([, key]) => key === 'description');
+                if (descriptionEntry) headerMap[parseInt(descriptionEntry[0], 10)] = 'item_name';
+            }
+            if (!Object.values(headerMap).includes('item_name')) {
+                const detectedHeaders = headerRow.filter(h => h).join(', ');
+                throw new Error(`Could not find a required 'item_name' column (or a valid alias). Detected headers in your file are: [${detectedHeaders}]. Please check your column names.`);
+            }
+            const normalizedItems = [];
+            dataRows.forEach((row, rowIndex) => {
+                if(row.every(cell => cell === null || cell === '' || cell === undefined)) return;
+                const item = { id: 
+`item-${rowIndex + 1}` };
+                Object.entries(headerMap).forEach(([index, key]) => {
+                    const cellValue = row[parseInt(index, 10)];
+                    if(cellValue !== null && cellValue !== undefined) item[key] = String(cellValue);
+                });
+                if (item.item_name && item.item_name.trim() !== '') normalizedItems.push(item);
+            });
+            return normalizedItems;
+        }
+        function createHeaderMap(headerRow) {
+            const fieldAliases = { id: ['id'], item_name: ['item name', 'product name', 'title', 'name', 'item_name', 'description', 'الوصف', 'اسم المنتج', 'اسم الصنف'], category: ['category', 'type', 'product type', 'الفئة', 'التصنيف'], description: ['details', 'full description', 'item description', 'الوصف التفصيلي'], brand: ['brand', 'manufacturer', 'الماركة', 'العلامة التجارية', 'mfr'], model: ['model', 'model number', 'model_number', 'الموديل'], sku: ['sku', 'item code', 'product id', 'item_code', 'رقم المنتج', 'item no', 'smr code'] };
+            const headerMap = {};
+            const normalizedAliases = Object.entries(fieldAliases).map(([key, aliases]) => ({ key, aliases: aliases.map(a => a.toLowerCase().replace(/[
+		 ]/g, '')) }));
+            headerRow.forEach((header, index) => {
+                if (!header) return;
+                const normalizedHeader = header.toLowerCase().replace(/[
+		 ]/g, '');
+                const foundMapping = normalizedAliases.find(mapping => mapping.aliases.includes(normalizedHeader));
+                if (foundMapping && !Object.values(headerMap).includes(foundMapping.key)) headerMap[index] = foundMapping.key;
+            });
+            return headerMap;
+        }
+        const state = { appState: 'initializing', analysisData: null, error: null, progress: 0, filters: { text: '', decision: 'All', category: 'All', scoreRange: { min: -100, max: 100 } }, isExplainModalOpen: false, selectedItemForExplain: null, language: 'en' };
+        const setState = (newState) => { Object.assign(state, newState); render(); };
+        const t = (key, options) => {
+            let translation = translations[state.language][key] || translations['en'][key] || key;
+            if (options && typeof options.count !== 'undefined') {
+                translation = translation.replace('{count}', String(options.count));
+            }
+            return translation;
+        };
+        function render() {
+            document.getElementById('root').innerHTML = App();
+            attachEventListeners();
+        }
+        function App() {
+            return 
+`
+                <div class="min-h-screen bg-slate-900 text-slate-300 font-sans" key="${state.language}">
+                    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+                        ${Header()}
+                        <div class="mt-8" id="content-area">
+                            ${renderContent()}
+                        </div>
+                        <div id="modal-container"></div>
+                    </main>
+                </div>
+            `
+        }
+        function renderContent() {
+            switch (state.appState) {
+                case 'success':
+                    return 
+`
+                        <div class="space-y-8">
+                            <div class="flex justify-end gap-4">
+                                <button id="export-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-500 transition-colors duration-200">${t('button_export')}</button>
+                                <button id="reset-btn" class="bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-600 transition-colors duration-200">${t('button_analyze_another')}</button>
+                            </div>
+                        </div>
+                    `
+                case 'error':
+                    return 
+`
+                        <div class="space-y-6 max-w-2xl mx-auto text-center">
+                            <div class="p-8 bg-red-900/20 border border-red-500 rounded-lg">
+                                <h3 class="text-xl font-bold text-red-400">${t('error_title')}</h3>
+                                <p class="mt-2 text-red-300">${state.error}</p>
+                            </div>
+                            <button id="reset-btn" class="bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-600 transition-colors duration-200">${t('button_try_again')}</button>
+                        </div>
+                    `
+                case 'initializing':
+                    return `<div class="text-center p-8 text-slate-500">Initializing Analysis Engine...</div>`
+                case 'loading':
+                    return `${FileUpload()} ${Loader()}`
+                case 'idle':
+                default:
+                    return FileUpload()
+            }
+        }
+        function Header() {
+             return 
+`
+                <header class="relative text-center py-10">
+                    <div class="absolute top-4 right-4">
+                        <button id="toggle-lang-btn" class="bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-600 transition-colors duration-200">
+                            ${state.language === 'en' ? 'عربي' : 'English'}
+                        </button>
+                    </div>
+                    <h1 class="text-4xl font-bold text-white tracking-tight sm:text-5xl">${t('header_title')}</h1>
+                    <p class="mt-4 text-lg text-slate-400">${t('header_subtitle')}</p>
+                </header>
+            `
+        }
+        function FileUpload() {
+            return 
+`
+            <div class="max-w-2xl mx-auto">
+                <div id="file-upload-area" class="relative flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-200 border-slate-600 hover:border-slate-500 bg-slate-900">
+                    <input type="file" id="file-upload-input" class="absolute w-full h-full opacity-0 cursor-pointer" accept=".json,.csv,.xlsx,.xls">
+                    <div class="text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto text-slate-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l-3.75 3.75M12 9.75l3.75 3.75M3 17.25V21h18v-3.75M4.5 12a7.5 7.5 0 0115 0v2.25H4.5V12z"></path></svg>
+                        <p class="mt-4 text-lg font-semibold text-slate-300">
+                            <span class="text-teal-400">${t('upload_click')}</span> ${t('upload_drag_drop')}
+                        </p>
+                        <p class="text-sm text-slate-500">${t('upload_supported_files')}</p>
+                    </div>
+                </div>
+                <div id="file-display-area" class="hidden p-6 bg-slate-800 rounded-lg flex-col items-center space-y-4"></div>
+            </div>
+        `
+        }
+        function Loader() {
+            return 
+`
+            <div class="flex flex-col items-center justify-center text-center p-8 bg-slate-800/50 rounded-lg max-w-lg mx-auto">
+                <div class="w-16 h-16 border-4 border-teal-400 border-t-transparent rounded-full animate-spin"></div>
+                <p class="mt-6 text-xl font-semibold text-white">${t('loader_analyzing')}</p>
+                <div class="w-full bg-slate-700 rounded-full h-2.5 mt-4">
+                    <div class="bg-teal-500 h-2.5 rounded-full transition-all duration-300 ease-out" style="width: ${state.progress}%"></div>
+                </div>
+                <p class="mt-2 text-sm text-slate-400">${state.progress}%</p>
+            </div>
+        `
+        }
+        function attachEventListeners() {
+            const toggleLangBtn = document.getElementById('toggle-lang-btn');
+            if (toggleLangBtn) toggleLangBtn.addEventListener('click', handleToggleLanguage);
+            const fileUploadInput = document.getElementById('file-upload-input');
+            if(fileUploadInput) fileUploadInput.addEventListener('change', handleFileChange);
+            const fileUploadArea = document.getElementById('file-upload-area');
+            if(fileUploadArea) {
+                fileUploadArea.addEventListener('dragenter', handleDrag);
+                fileUploadArea.addEventListener('dragleave', handleDrag);
+                fileUploadArea.addEventListener('dragover', handleDrag);
+                fileUploadArea.addEventListener('drop', handleDrop);
+            }
+            const analyzeBtn = document.getElementById('analyze-btn');
+            if(analyzeBtn) analyzeBtn.addEventListener('click', handleAnalyzeClick);
+            const clearFileBtn = document.getElementById('clear-file-btn');
+            if(clearFileBtn) clearFileBtn.addEventListener('click', handleClearFile);
+            const resetBtn = document.getElementById('reset-btn');
+            if(resetBtn) resetBtn.addEventListener('click', handleReset);
+        }
+        function handleToggleLanguage() {
+            const newLang = state.language === 'en' ? 'ar' : 'en';
+            document.documentElement.lang = newLang;
+            document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+            setState({ language: newLang });
+        }
+        function handleFileChange(e) {
+            if (e.target.files && e.target.files[0]) {
+                handleFile(e.target.files[0]);
+            }
+        }
+        function handleDrag(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const area = document.getElementById('file-upload-area');
+            if (e.type === "dragenter" || e.type === "dragover") {
+                area.classList.add('border-teal-400', 'bg-slate-800');
+                area.classList.remove('border-slate-600', 'bg-slate-900');
+            } else if (e.type === "dragleave") {
+                area.classList.remove('border-teal-400', 'bg-slate-800');
+                area.classList.add('border-slate-600', 'bg-slate-900');
+            }
+        }
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const area = document.getElementById('file-upload-area');
+            area.classList.remove('border-teal-400', 'bg-slate-800');
+            area.classList.add('border-slate-600', 'bg-slate-900');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        }
+        let selectedFile = null;
+        function handleFile(file) {
+            const allowedExtensions = ['.json', '.csv', '.xlsx', '.xls'];
+            const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+            if (allowedExtensions.includes(fileExtension)) {
+                selectedFile = file;
+                showFileDisplay(file);
+            } else {
+                alert(t('alert_invalid_file'));
+            }
+        }
+        function showFileDisplay(file) {
+            const fileUploadArea = document.getElementById('file-upload-area');
+            const fileDisplayArea = document.getElementById('file-display-area');
+            fileUploadArea.classList.add('hidden');
+            fileDisplayArea.classList.remove('hidden');
+            fileDisplayArea.innerHTML = 
+`
+                <div class="flex items-center space-x-4 w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-teal-400 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
+                    <div class="flex-grow overflow-hidden">
+                         <p class="font-medium text-white truncate">${file.name}</p>
+                         <p class="text-sm text-slate-400">${(file.size / 1024).toFixed(2)} KB</p>
+                    </div>
+                    <button id="clear-file-btn" class="p-1 text-slate-500 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                </div>
+                <button id="analyze-btn" class="w-full bg-teal-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-500 transition-colors duration-200">
+                    ${t('button_analyze_now')}
+                </button>
+            `
+            attachEventListeners();
+        }
+        function handleClearFile() {
+            selectedFile = null;
+            const fileUploadArea = document.getElementById('file-upload-area');
+            const fileDisplayArea = document.getElementById('file-display-area');
+            fileUploadArea.classList.remove('hidden');
+            fileDisplayArea.classList.add('hidden');
+        }
+        function handleAnalyzeClick() {
+            if (selectedFile) {
+               handleFileSelect(selectedFile);
+            }
+        }
+        function handleReset() {
+            setState({ appState: 'idle', analysisData: null, error: null, progress: 0 });
+        }
+        async function handleFileSelect(file) {
+            setState({ appState: 'loading', error: null, analysisData: null, progress: 0 });
+            try {
+                const parsedItems = await parseFile(file);
+                const data = await analyzeInventoryWithWorker(parsedItems, knowledgeManager, (p) => setState({ progress: p }));
+                setState({ analysisData: data, appState: 'success' });
+            } catch (err) {
+                console.error(err);
+                const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred during analysis.';
+                setState({ error: errorMessage + ' Please check the file format and content.', appState: 'error' });
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const km = new KnowledgeManager();
+            km.load().then(() => {
+                setState({ appState: 'idle' });
+            }).catch(err => {
+                setState({ appState: 'error', error: err.message });
+            });
+        });
+    </script>
+</body>
+</html>

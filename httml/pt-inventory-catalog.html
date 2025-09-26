@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>محلل مخزون العلاج الطبيعي — كتالوج سريري سريع</title>
+  <meta name="color-scheme" content="dark light" />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#111827;
+      --muted:#64748b;
+      --text:#e5e7eb;
+      --ring:#1f2937;
+      --accent:#0ea5a4;
+      --ok:#065f46;
+      --warn:#92400e;
+      --bad:#7f1d1d;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;font-family:system-ui, -apple-system, Segoe UI, Roboto, "Noto Naskh Arabic UI", "Noto Kufi Arabic", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background:linear-gradient(180deg, #0a0f1a, var(--bg));
+      color:var(--text);
+    }
+    .container{max-width:1200px;margin:0 auto;padding:20px}
+    h1{font-size:clamp(20px,3vw,28px);margin:0 0 12px}
+    .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+
+    .panel{background:var(--panel);border:1px solid var(--ring);border-radius:14px;padding:16px}
+    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .grow{flex:1 1 auto}
+    .btn{background:#1f2937;color:#e5e7eb;border:1px solid #2b3748;border-radius:10px;padding:8px 12px;cursor:pointer}
+    .btn:hover{background:#2a3648}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
+    .btn-accent{background:var(--accent);border-color:#0b7f7e;color:#081217}
+    .btn-accent:hover{filter:brightness(0.95)}
+
+    .chip{background:#1f2937;color:#e5e7eb;border:1px solid #2b3748;border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer;user-select:none}
+    .chip.active{background:var(--accent);color:#031818;border-color:#0b7f7e}
+    .legend span{font-size:12px;padding:4px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+    .lg-ok{background:rgba(16,185,129,.18)}
+    .lg-warn{background:rgba(245,158,11,.18)}
+    .lg-bad{background:rgba(239,68,68,.18)}
+
+    .drop{border:2px dashed #2b3748;border-radius:14px;padding:18px;text-align:center;color:var(--muted)}
+    .drop.drag{background:#0f172a}
+    .search{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #2b3748;background:#0b1324;color:#e5e7eb}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+    .card{border:1px solid var(--ring);border-radius:14px;padding:12px;transition:filter .2s, transform .05s}
+    .card:hover{filter:brightness(1.05)}
+    .ring-ok{box-shadow:0 0 0 1px rgba(16,185,129,.35) inset;background:rgba(16,185,129,.08)}
+    .ring-warn{box-shadow:0 0 0 1px rgba(245,158,11,.35) inset;background:rgba(245,158,11,.08)}
+    .ring-bad{box-shadow:0 0 0 1px rgba(239,68,68,.35) inset;background:rgba(239,68,68,.08)}
+    .title{font-size:14px;font-weight:600;line-height:1.35;margin:0 0 6px}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#cbd5e1}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .tag{background:#1f2937;border:1px solid #2b3748;color:#d1d5db;border-radius:8px;padding:2px 8px;font-size:11px}
+    .muted{color:var(--muted)}
+    .footer{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:12px;border-top:1px dashed #2b3748;padding-top:10px}
+    .stat{font-size:12px;color:#cbd5e1}
+    .progress{height:6px;background:#1f2937;border-radius:999px;overflow:hidden}
+    .progress>i{display:block;height:100%;background:var(--accent);width:0%}
+    .hidden{display:none !important}
+    .pill{font-size:11px;padding:3px 8px;border-radius:999px;background:#0b1324;border:1px solid #233147;color:#cbd5e1}
+    .section-title{margin-top:4px;margin-bottom:8px;color:#cbd5e1;font-size:13px}
+    .kbd{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0b1324;border:1px solid #233147;border-bottom-color:#1a2436;border-radius:6px;padding:2px 6px;font-size:11px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>كتالوج العلاج الطبيعي — عرض سريري سريع</h1>
+      <div class="sub">ارفع ملف Excel/CSV، شف المنتجات **مرتّبة ومصنّفة** حسب التخصص/الاستخدام/الفئة/العضو، مع تلوين الحالة: علاج طبيعي ✅ / مشكوك فيه ⚠️ / غير مناسب ❌</div>
+    </header>
+
+    <section class="panel" id="uploader">
+      <div class="row" style="gap:12px">
+        <div class="grow">
+          <div class="drop" id="drop">
+            اسحب الملف هنا أو
+            <label class="btn" style="margin-inline:6px; display:inline-block">
+              اختر ملف <input id="file" type="file" accept=".xlsx,.xls,.csv" hidden>
+            </label>
+            <div class="muted" style="margin-top:8px;font-size:12px">يُفضَّل Excel بعمود الوصف والأكواد. يدعم العربية والإنجليزية.</div>
+          </div>
+        </div>
+        <div style="min-width:260px" class="grow">
+          <input id="search" class="search" placeholder="ابحث بالاسم/الكود/الماركة..." />
+          <div class="section-title">الأسطورة</div>
+          <div class="legend row" style="gap:6px">
+            <span class="lg-ok">علاج طبيعي</span>
+            <span class="lg-warn">مشكوك فيه</span>
+            <span class="lg-bad">غير مناسب</span>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <div class="progress grow"><i id="bar"></i></div>
+        <div class="stat" id="statusText">جاهز</div>
+        <button id="exportBtn" class="btn btn-accent" disabled>تصدير العرض المُفلتر (Excel)</button>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:12px">
+      <div class="row" id="filters">
+        <span class="pill">فلترة سريعة:</span>
+        <div id="statusChips" class="row"></div>
+      </div>
+      <div class="row" style="margin-top:8px; gap:6px">
+        <div class="pill">التخصص:</div><div id="facet-specialty" class="row"></div>
+      </div>
+      <div class="row" style="margin-top:6px; gap:6px">
+        <div class="pill">الاستخدام:</div><div id="facet-use" class="row"></div>
+      </div>
+      <div class="row" style="margin-top:6px; gap:6px">
+        <div class="pill">الفئة:</div><div id="facet-category" class="row"></div>
+      </div>
+      <div class="row" style="margin-top:6px; gap:6px">
+        <div class="pill">العضو المصاب:</div><div id="facet-region" class="row"></div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:12px">
+      <div class="footer">
+        <div class="stat">العناصر: <b id="count">0</b> | PT: <b id="count-pt">0</b> | ⚠️: <b id="count-review">0</b> | ❌: <b id="count-nonpt">0</b></div>
+        <div class="muted">نصيحة: اضغط <span class="kbd">Ctrl</span>/<span class="kbd">Cmd</span> مع النقر لتحديد عدة فلاتر.</div>
+      </div>
+      <div id="grid" class="grid" style="margin-top:12px"></div>
+      <button id="showMore" class="btn" style="margin-top:12px; width:100%; display:none">عرض المزيد</button>
+    </section>
+  </div>
+
+  <!-- SheetJS for Excel support (بدّل الـCDN لو حابب تستضيف محلي) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script>
+  <script>
+  // ====== State ======
+  const state = {
+    raw: [],        // raw rows from Excel/CSV
+    items: [],      // enriched items with tags/status
+    filters: { status: ['pt','review','nonpt'], specialty: [], use: [], category: [], region: [] },
+    search: '',
+    pageSize: 160,  // chunked render
+    page: 1,
+  };
+
+  const el = (sel) => document.querySelector(sel);
+  const els = (sel) => Array.from(document.querySelectorAll(sel));
+
+  // ====== Uploader ======
+  const fileInput = el('#file');
+  const drop = el('#drop');
+  const bar = el('#bar');
+  const statusText = el('#statusText');
+
+  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+  drop.addEventListener('drop', (e) => {
+    e.preventDefault(); drop.classList.remove('drag');
+    const f = e.dataTransfer.files[0]; if (f) handleFile(f);
+  });
+  fileInput.addEventListener('change', (e) => {
+    const f = e.target.files[0]; if (f) handleFile(f);
+  });
+
+  function setProgress(p, txt){
+    bar.style.width = Math.max(0, Math.min(100, p)) + '%';
+    if (txt) statusText.textContent = txt;
+  }
+
+  async function handleFile(file){
+    setProgress(6, 'قراءة الملف...');
+    const buffer = await file.arrayBuffer();
+    let rows = [];
+    if (file.name.endsWith('.csv')) {
+      rows = CSVToJSON(new TextDecoder().decode(new Uint8Array(buffer)));
+    } else {
+      const wb = XLSX.read(buffer, { type:'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    }
+    state.raw = rows;
+    setProgress(18, 'تطبيع الحقول...');
+    const normalized = rows.map(normalizeRow);
+    setProgress(26, 'اشتقاق التاقات/الحالة...');
+    // process in chunks to keep UI responsive
+    state.items = [];
+    await processInChunks(normalized, 1000, chunk => {
+      for(const r of chunk){ state.items.push(enrich(r)); }
+      setProgress(26 + Math.min(60, (state.items.length / normalized.length) * 60), `تحليل ${state.items.length}/${normalized.length}`);
+    });
+    setProgress(90, 'بناء الأوجه (facets)...');
+    buildFacets();
+    setProgress(100, 'جاهز');
+    render();
+    el('#exportBtn').disabled = false;
+  }
+
+  // ====== CSV Fallback Parser ======
+  function CSVToJSON(csv) {
+    const lines = csv.split(/\r?\n/).filter(Boolean);
+    const headers = lines.shift().split(',').map(h => h.trim());
+    const out = [];
+    for (const line of lines) {
+      const cols = line.split(','); const row = {};
+      headers.forEach((h,i)=> row[h] = (cols[i]||'').trim());
+      out.push(row);
+    }
+    return out;
+  }
+
+  // ====== Normalization ======
+  function normalizeRow(r){
+    const mapKey = (k)=> String(k||'').toLowerCase().replace(/\s+/g,'').replace(/[._-]/g,'');
+    const keys = {}; for (const k in r) keys[mapKey(k)] = k;
+    const pick = (...names)=>{
+      for(const n of names){ const key = keys[mapKey(n)]; if (key) return r[key]; }
+      return '';
+    };
+    return {
+      item_name: pick('Item Description','ItemDescription','Description','العنصر','الوصف'),
+      PT_Category: pick('PT_Category','Category','الفئة'),
+      Decision: pick('Decision','القرار'),
+      Score: Number(pick('Score','التقييم') || 0),
+      MFR: pick('MFR','Manufacturer','مصنّع','المصنع'),
+      ORIGIN: pick('ORIGIN','بلدالمنشأ','المنشأ'),
+      Model: pick('Model','موديل','نموذج'),
+      SMR: pick('SMR code','SMR','NUPCO','Code','الكود'),
+      Price: Number(pick('UP .SR','Price','السعر') || NaN)
+    };
+  }
+
+  // ====== Tag Derivation ======
+  const REGION_DICT = { shoulder:'كتف', wrist:'معصم', hand:'يد', elbow:'مرفق', knee:'ركبة', ankle:'كاحل', foot:'قدم', hip:'ورك', neck:'رقبة', cervical:'عنق', lumbar:'قطني', spine:'عمود فقري' };
+  const SPECIALTY_RULES = [
+    { ar:'عظام', rx:/(orthopedic|splint|brace|sporlastic|theratogs|knee|ankle|wrist|hip|shoulder|spine|cervical|رقبة|عمود|ركب|كاحل|معصم)/i },
+    { ar:'أعصاب', rx:/(neuro|stroke|hemipleg|scapular|balance|gait|vicon|delsys|شلل|توازن|مشية)/i },
+    { ar:'أطفال', rx:/(pediatric|child|youth|xs|x-small|طفل|أطفال)/i },
+    { ar:'رياضي', rx:/(theraband|band|exercise|ball|gloves|exgel|cando|رياض|تمارين)/i },
+    { ar:'كبار سن', rx:/(walker|grab\s?bar|transfer|non slip|dycem|weighted utensils|كبار|مسن|مسنين)/i },
+  ];
+  const USE_RULES = [
+    { ar:'حركة', rx:/(crutch|walker|wheelchair|transfer|grab\s?bar|belt|cushion|عكاز|مشاية|كرسي)/i },
+    { ar:'تقييم', rx:/(assessment|mvpt|dlotca|marker|vicon|delsys|analysis|kit|تقييم|اختبار)/i },
+    { ar:'علاج كهربائي/حراري', rx:/(tens|electrode|ultrasound|heat pack|hydrocollator|حراري|كهربائي)/i },
+    { ar:'تمارين/مقاومة', rx:/(resistance band|theraband|exercise ball|band|dumbbell|تمرين|مقاومة)/i },
+    { ar:'مساعدات نشاط يومي', rx:/(utensils|cup|plate|knife|foam tubing|non slip|dycem|holder|أنشطة|أكل|ملاعق|شرب)/i },
+  ];
+  const CATEGORY_FALLBACK = [
+    { ar:'أدوات الحركة', rx:/(crutch|walker|wheelchair|transfer|grab\s?bar|belt|cushion|عكاز|مشاية|كرسي)/i },
+    { ar:'أدوات التقييم', rx:/(assessment|mvpt|dlotca|marker|vicon|delsys|analysis|kit|تقييم)/i },
+    { ar:'أجهزة العلاج', rx:/(tens|electrode|ultrasound|heat pack|hydrocollator|علاج)/i },
+    { ar:'التمارين/المقاومة', rx:/(resistance|theraband|exercise ball|band|dumbbell|تمرين|مقاومة)/i },
+    { ar:'مساعدات أنشطة يومية', rx:/(utensils|cup|plate|knife|foam tubing|non slip|dycem|holder|أكل|شرب)/i },
+    { ar:'مستهلكات', rx:/(electrode|band|marker|cover|pack|مستهلك)/i },
+  ];
+
+  function deriveRegion(name){
+    const out = new Set();
+    const low = name.toLowerCase();
+    for(const [en,ar] of Object.entries(REGION_DICT)) if(low.includes(en)) out.add(ar);
+    if(/كتف/.test(name)) out.add('كتف');
+    if(/رسغ|معصم/.test(name)) out.add('معصم');
+    if(/ركب/.test(name)) out.add('ركبة');
+    if(/ورك/.test(name)) out.add('ورك');
+    if(/عنق|رقبة/.test(name)) out.add('رقبة');
+    if(/عمود|فقر/.test(name)) out.add('عمود فقري');
+    return Array.from(out);
+  }
+  function deriveSpecialty(name){
+    const out = new Set();
+    for(const r of SPECIALTY_RULES) if(r.rx.test(name)) out.add(r.ar);
+    return Array.from(out).slice(0,2);
+  }
+  function deriveUse(name){
+    const out = new Set();
+    for(const r of USE_RULES) if(r.rx.test(name)) out.add(r.ar);
+    return Array.from(out).slice(0,3);
+  }
+  function deriveCategory(item, name){
+    const out = new Set();
+    if(item.PT_Category) out.add(item.PT_Category);
+    for(const r of CATEGORY_FALLBACK) if(r.rx.test(name)) out.add(r.ar);
+    return Array.from(out).slice(0,2);
+  }
+  function computeStatus(item){
+    const d = String(item.Decision||'').toLowerCase();
+    if(d==='accepted') return 'pt';
+    if(d==='review') return 'review';
+    if(d==='rejected') return 'nonpt';
+    const s = Number(item.Score||0);
+    if(s>=15) return 'pt';
+    if(s<=0) return 'nonpt';
+    return 'review';
+  }
+  function getCodes(item){
+    return [item.SMR, item.Model].filter(Boolean).slice(0,3);
+  }
+
+  function enrich(item){
+    const name = (item.item_name||'').toString();
+    const tags = {
+      specialty: deriveSpecialty(name),
+      use: deriveUse(name),
+      category: deriveCategory(item, name),
+      region: deriveRegion(name),
+    };
+    const status = computeStatus(item);
+    return { raw:item, name, tags, status };
+  }
+
+  // ====== Facets ======
+  function buildFacets(){
+    const set = { specialty:new Set(), use:new Set(), category:new Set(), region:new Set() };
+    for(const e of state.items){
+      e.tags.specialty.forEach(t=>set.specialty.add(t));
+      e.tags.use.forEach(t=>set.use.add(t));
+      e.tags.category.forEach(t=>set.category.add(t));
+      e.tags.region.forEach(t=>set.region.add(t));
+    }
+    renderChips('#statusChips', [
+      {key:'pt', label:'علاج طبيعي'},
+      {key:'review', label:'مشكوك فيه'},
+      {key:'nonpt', label:'غير مناسب'}
+    ], 'status');
+
+    renderFacet('#facet-specialty', Array.from(set.specialty).sort(), 'specialty');
+    renderFacet('#facet-use', Array.from(set.use).sort(), 'use');
+    renderFacet('#facet-category', Array.from(set.category).sort(), 'category');
+    renderFacet('#facet-region', Array.from(set.region).sort(), 'region');
+  }
+
+  function renderChips(containerSel, items, facetKey){
+    const c = el(containerSel); c.innerHTML='';
+    for(const it of items){
+      const b = document.createElement('button');
+      b.className = 'chip ' + (state.filters.status.includes(it.key) ? 'active' : '');
+      b.textContent = it.label;
+      b.addEventListener('click', (ev)=>{
+        const set = new Set(state.filters[facetKey]||[]);
+        if(ev.ctrlKey||ev.metaKey){
+          set.has(it.key) ? set.delete(it.key) : set.add(it.key);
+        }else{
+          if(set.size===1 && set.has(it.key)){ set.clear(); set.add(it.key); }
+          else if(set.size>1 && set.has(it.key)){ set.delete(it.key); }
+          else { set.clear(); set.add(it.key); }
+        }
+        state.filters[facetKey] = Array.from(set);
+        if(!state.filters[facetKey].length) state.filters[facetKey] = items.map(x=>x.key); // لا تتركها فاضية
+        state.page = 1;
+        render();
+      });
+      c.appendChild(b);
+    }
+  }
+
+  function renderFacet(containerSel, values, facetKey){
+    const c = el(containerSel); c.innerHTML='';
+    for(const v of values){
+      const b = document.createElement('button');
+      const active = state.filters[facetKey].includes(v);
+      b.className = 'chip ' + (active ? 'active' : '');
+      b.textContent = v;
+      b.addEventListener('click', (ev)=>{
+        const set = new Set(state.filters[facetKey]);
+        if(ev.ctrlKey||ev.metaKey){
+          active ? set.delete(v) : set.add(v);
+        }else{
+          if(active && state.filters[facetKey].length===1){
+            set.clear(); set.add(v);
+          }else if(active){ set.delete(v); }
+          else { set.clear(); set.add(v); }
+        }
+        state.filters[facetKey] = Array.from(set);
+        state.page = 1;
+        render();
+      });
+      c.appendChild(b);
+    }
+  }
+
+  // ====== Filtering / Sorting / Rendering ======
+  function passesFilters(e){
+    if(!state.filters.status.includes(e.status)) return false;
+    const f = state.filters;
+    if(f.specialty.length && !e.tags.specialty.some(t=>f.specialty.includes(t))) return false;
+    if(f.use.length && !e.tags.use.some(t=>f.use.includes(t))) return false;
+    if(f.category.length && !e.tags.category.some(t=>f.category.includes(t))) return false;
+    if(f.region.length && !e.tags.region.some(t=>f.region.includes(t))) return false;
+    if(state.search){
+      const s = state.search.toLowerCase();
+      const raw = e.name + ' ' + (e.raw.MFR||'') + ' ' + (e.raw.Model||'') + ' ' + (e.raw.SMR||'');
+      if(!raw.toLowerCase().includes(s)) return false;
+    }
+    return true;
+  }
+
+  function sortNeed(a,b){
+    const w = { pt:0, review:1, nonpt:2 };
+    const sa = w[a.status], sb = w[b.status];
+    if(sa!==sb) return sa - sb;
+    const as = Number(a.raw.Score||0), bs = Number(b.raw.Score||0);
+    if(as!==bs) return bs - as;
+    return a.name.localeCompare(b.name);
+  }
+
+  function render(){
+    const list = state.items.filter(passesFilters).sort(sortNeed);
+    const total = list.length;
+    const pageItems = list.slice(0, state.page * state.pageSize);
+
+    el('#count').textContent = String(total);
+    el('#count-pt').textContent = String(list.filter(x=>x.status==='pt').length);
+    el('#count-review').textContent = String(list.filter(x=>x.status==='review').length);
+    el('#count-nonpt').textContent = String(list.filter(x=>x.status==='nonpt').length);
+
+    const grid = el('#grid');
+    grid.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    for (const e of pageItems){
+      frag.appendChild(renderCard(e));
+    }
+    grid.appendChild(frag);
+
+    const more = el('#showMore');
+    if (pageItems.length < total) {
+      more.style.display = 'block';
+      more.onclick = () => { state.page++; render(); };
+    } else {
+      more.style.display = 'none';
+    }
+  }
+
+  function renderCard(e){
+    const div = document.createElement('div');
+    const cls = e.status==='pt' ? 'ring-ok' : (e.status==='review' ? 'ring-warn' : 'ring-bad');
+    div.className = 'card '+cls;
+    const codes = getCodes(e.raw);
+    div.innerHTML = `
+      <div class="row" style="justify-content:space-between">
+        <h3 class="title">${escapeHTML(e.name||'—')}</h3>
+        <span class="pill">${ e.status==='pt'?'منتج علاج طبيعي': e.status==='review'?'مشكوك فيه':'غير مناسب' }</span>
+      </div>
+      <div class="meta">
+        <div><div class="muted">الأكواد</div><div class="mono">${ codes.length? codes.map(c=>`<div class="truncate">${escapeHTML(String(c))}</div>`).join('') : '—' }</div></div>
+        <div><div class="muted">الدرجة</div><div>${Number(e.raw.Score||0)}</div></div>
+      </div>
+      <div class="tags">
+        ${e.tags.specialty.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}
+        ${e.tags.use.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}
+        ${e.tags.category.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}
+        ${e.tags.region.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}
+      </div>
+      <div class="footer">
+        <div class="muted">${e.raw.MFR ? 'المصنّع: <b>'+escapeHTML(e.raw.MFR)+'</b>' : ''} ${e.raw.ORIGIN ? ' | المنشأ: <b>'+escapeHTML(e.raw.ORIGIN)+'</b>' : ''}</div>
+        ${Number.isFinite(e.raw.Price) ? '<div class="muted">السعر: <b>'+e.raw.Price+'</b></div>' : ''}
+      </div>
+    `;
+    return div;
+  }
+
+  // ====== Search ======
+  el('#search').addEventListener('input', (e)=>{
+    state.search = e.target.value.trim();
+    state.page = 1;
+    render();
+  });
+
+  // ====== Export current view ======
+  el('#exportBtn').addEventListener('click', ()=>{
+    const list = state.items.filter(passesFilters).sort(sortNeed);
+    const data = list.map(x=>x.raw);
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'CurrentView');
+    XLSX.writeFile(wb, `PT_View_${new Date().toISOString().slice(0,10)}.xlsx`);
+  });
+
+  // ====== Utils ======
+  function processInChunks(arr, size, onChunk){
+    return new Promise((resolve)=>{
+      let i=0;
+      function next(){
+        const end = Math.min(arr.length, i+size);
+        onChunk(arr.slice(i,end));
+        i=end;
+        if(i < arr.length) requestAnimationFrame(next);
+        else resolve();
+      }
+      next();
+    });
+  }
+  function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[m])); }
+  </script>
+</body>
+</html>

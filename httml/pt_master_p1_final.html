@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PT Master P1 Transformation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .process-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .process-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #333;
+            font-size: 1.8em;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .log-area {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .success { color: #4caf50; }
+        .info { color: #2196f3; }
+        .warning { color: #ff9800; }
+        .error { color: #f44336; }
+        
+        .sample-section {
+            margin-top: 20px;
+        }
+        
+        .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .sample-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .sample-id {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .sample-value {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 PT Master P1 Transformation</h1>
+            <p class="subtitle">Structural Normalization with Systematic ID Generation</p>
+        </div>
+        
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalTerms">-</div>
+                <div class="stat-label">Search Terms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="includeTerms">-</div>
+                <div class="stat-label">Include Terms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="ignoreTerms">-</div>
+                <div class="stat-label">Ignore Terms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalVariants">-</div>
+                <div class="stat-label">Total Variants</div>
+            </div>
+        </div>
+        
+        <div class="process-section">
+            <div class="process-header">
+                <h2>عملية التحويل</h2>
+                <button class="btn" id="startBtn" onclick="startTransformation()">بدء P1</button>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">0%</div>
+            </div>
+            
+            <div class="log-area" id="logArea">
+                <div class="log-entry info">جاهز لبدء تحويل P1...</div>
+            </div>
+        </div>
+        
+        <div class="process-section sample-section" id="sampleSection" style="display:none;">
+            <h2>عينات IDs المُنشأة</h2>
+            <div class="sample-grid" id="sampleGrid"></div>
+        </div>
+    </div>
+    
+    <script>
+        let transformationData = null;
+        
+        function addLog(message, type = 'info') {
+            const logArea = document.getElementById('logArea');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString('ar-SA')}] ${message}`;
+            logArea.appendChild(entry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+        
+        function updateProgress(percent, message) {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percent + '%';
+            progressBar.textContent = percent + '%';
+            if (message) addLog(message, 'info');
+        }
+        
+        function updateStats(stats) {
+            document.getElementById('totalTerms').textContent = stats.canonical_terms?.toLocaleString() || '-';
+            document.getElementById('includeTerms').textContent = stats.include_terms?.toLocaleString() || '-';
+            document.getElementById('ignoreTerms').textContent = stats.ignore_terms?.toLocaleString() || '-';
+            document.getElementById('totalVariants').textContent = stats.total_variants?.toLocaleString() || '-';
+        }
+        
+        function displaySamples(samples) {
+            const sampleGrid = document.getElementById('sampleGrid');
+            sampleGrid.innerHTML = '';
+            
+            if (samples.search_terms) {
+                samples.search_terms.forEach(term => {
+                    const card = document.createElement('div');
+                    card.className = 'sample-card';
+                    card.innerHTML = `
+                        <div class="sample-id">${term.id}</div>
+                        <div class="sample-value">${term.canonical}</div>
+                    `;
+                    sampleGrid.appendChild(card);
+                });
+            }
+            
+            document.getElementById('sampleSection').style.display = 'block';
+        }
+        
+        async function startTransformation() {
+            const btn = document.getElementById('startBtn');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+            
+            addLog('Starting P1 transformation...', 'info');
+            updateProgress(10, 'Loading source file...');
+            
+            try {
+                // Load the source file
+                const fileContent = await window.fs.readFile('PT_MASTER_LOSSLESS_RUNTIME.json', { encoding: 'utf8' });
+                const master = JSON.parse(fileContent);
+                
+                updateProgress(20, 'Parsing data structure...');
+                
+                // ID generation function
+                const generateId = (prefix, index) => `${prefix}_${String(index + 1).padStart(6, '0')}`;
+                
+                // Initialize restructured object
+                const restructured = {
+                    meta: {
+                        ...master.meta,
+                        version: "1.0.0",
+                        rule_versions: 1,
+                        generated_at: new Date().toISOString(),
+                        transformation: "P1_IDNORMAL"
+                    },
+                    config: master.config || {},
+                    knowledge_pack: master.knowledge_pack || {},
+                    search_terms: {
+                        meta: master.search_terms?.meta || {},
+                        terms: []
+                    },
+                    lists: {
+                        include_terms: { meta: { count: 0 }, terms: [] },
+                        ignore_terms: { meta: { count: 0 }, terms: [] }
+                    },
+                    runtime: master.runtime || {},
+                    provenance: master.provenance || {},
+                    conflicts: master.conflicts || {},
+                    react_db: master.react_db || {},
+                    audit: { 
+                        timestamp: new Date().toISOString(), 
+                        issues: [], 
+                        stats: {},
+                        duplicates: []
+                    }
+                };
+                
+                updateProgress(30, 'Processing search terms...');
+                
+                // Process search_terms with IDs
+                if (master.search_terms?.terms) {
+                    restructured.search_terms.terms = master.search_terms.terms.map((term, idx) => ({
+                        id: generateId('canon', idx),
+                        canonical: term.canonical,
+                        variants: term.variants || [],
+                        sources: term.sources || [],
+                        first_seen: master.search_terms.meta?.generated_at || "2025-09-11T00:00:00Z",
+                        last_seen: new Date().toISOString(),
+                        confidence: 0.85,
+                        variant_count: term.variant_count || 1
+                    }));
+                }
+                
+                updateProgress(50, 'Processing include terms...');
+                
+                // Process include_terms
+                if (master.lists?.include_terms) {
+                    const includeTerms = [];
+                    Object.keys(master.lists.include_terms).forEach(key => {
+                        if (!isNaN(key)) {
+                            includeTerms.push(master.lists.include_terms[key]);
+                        }
+                    });
+                    
+                    restructured.lists.include_terms.terms = includeTerms.map((term, idx) => ({
+                        id: generateId('incl', idx),
+                        value: term,
+                        type: 'include',
+                        weight: master.config?.weights?.include_term || 15
+                    }));
+                }
+                
+                updateProgress(70, 'Processing ignore terms...');
+                
+                // Process ignore_terms
+                if (master.lists?.ignore_terms) {
+                    const ignoreTerms = [];
+                    Object.keys(master.lists.ignore_terms).forEach(key => {
+                        if (!isNaN(key)) {
+                            ignoreTerms.push(master.lists.ignore_terms[key]);
+                        }
+                    });
+                    
+                    restructured.lists.ignore_terms.terms = ignoreTerms.map((term, idx) => ({
+                        id: generateId('ignr', idx),
+                        value: term,
+                        type: 'ignore',
+                        weight: master.config?.weights?.ignore_term || -50
+                    }));
+                }
+                
+                // Update counts
+                restructured.lists.include_terms.meta.count = restructured.lists.include_terms.terms.length;
+                restructured.lists.ignore_terms.meta.count = restructured.lists.ignore_terms.terms.length;
+                
+                updateProgress(80, 'Detecting duplicates and issues...');
+                
+                // Detect duplicates
+                const canonicalMap = new Map();
+                const duplicates = [];
+                
+                restructured.search_terms.terms.forEach((term, idx) => {
+                    const key = term.canonical.toLowerCase();
+                    if (canonicalMap.has(key)) {
+                        duplicates.push({
+                            type: "duplicate_canonical",
+                            current: { id: term.id, canonical: term.canonical },
+                            existing: canonicalMap.get(key)
+                        });
+                    } else {
+                        canonicalMap.set(key, { id: term.id, canonical: term.canonical });
+                    }
+                });
+                
+                restructured.audit.duplicates = duplicates;
+                
+                // Calculate statistics
+                restructured.audit.stats = {
+                    canonical_terms: restructured.search_terms.terms.length,
+                    unique_canonicals: canonicalMap.size,
+                    include_terms: restructured.lists.include_terms.terms.length,
+                    ignore_terms: restructured.lists.ignore_terms.terms.length,
+                    total_variants: restructured.search_terms.terms.reduce((sum, t) => sum + t.variant_count, 0),
+                    duplicate_count: duplicates.length
+                };
+                
+                updateProgress(90, 'Writing output file...');
+                
+                // Write the file
+                await window.fs.writeFile('PT_MASTER_P1_IDNORMAL.json', JSON.stringify(restructured, null, 2));
+                
+                updateProgress(100, '✅ P1 transformation complete!');
+                addLog(`Created ${restructured.audit.stats.canonical_terms} canonical terms with IDs`, 'success');
+                addLog(`Created ${restructured.audit.stats.include_terms} include terms with IDs`, 'success');
+                addLog(`Created ${restructured.audit.stats.ignore_terms} ignore terms with IDs`, 'success');
+                if (duplicates.length > 0) {
+                    addLog(`Found ${duplicates.length} duplicate canonicals`, 'warning');
+                }
+                
+                // Update UI
+                updateStats(restructured.audit.stats);
+                displaySamples({
+                    search_terms: restructured.search_terms.terms.slice(0, 6)
+                });
+                
+                transformationData = restructured;
+                
+                btn.textContent = '✅ P1 Complete';
+                btn.style.background = 'linear-gradient(135deg, #4caf50, #8bc34a)';
+                
+            } catch (error) {
+                addLog(`Error: ${error.message}`, 'error');
+                btn.disabled = false;
+                btn.textContent = 'Retry P1';
+                updateProgress(0, '');
+            }
+        }
+    </script>
+</body>
+</html>

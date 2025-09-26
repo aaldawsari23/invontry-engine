@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>كتالوج العلاج الطبيعي — نسخة CSV (بدون تبعيات)</title>
+  <meta name="color-scheme" content="dark light" />
+  <style>
+    :root{ --bg:#0b1220; --panel:#111827; --muted:#64748b; --text:#e5e7eb; --ring:#1f2937; --accent:#0ea5a4; }
+    body{margin:0;background:linear-gradient(180deg,#0a0f1a,var(--bg));color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Naskh Arabic UI","Noto Kufi Arabic",Arial}
+    .container{max-width:1200px;margin:0 auto;padding:20px}
+    .panel{background:var(--panel);border:1px solid var(--ring);border-radius:14px;padding:16px}
+    h1{margin:0 0 10px;font-size:clamp(20px,3vw,28px)}
+    .muted{color:var(--muted)}
+    .btn{background:#1f2937;color:#e5e7eb;border:1px solid #2b3748;border-radius:10px;padding:8px 12px;cursor:pointer}
+    .btn:hover{background:#2a3648}
+    .btn-accent{background:var(--accent);border-color:#0b7f7e;color:#081217}
+    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .drop{border:2px dashed #2b3748;border-radius:14px;padding:18px;text-align:center;color:var(--muted)}
+    .drop.drag{background:#0f172a}
+    .search{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #2b3748;background:#0b1324;color:#e5e7eb}
+    .chip{background:#1f2937;color:#e5e7eb;border:1px solid #2b3748;border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer;user-select:none}
+    .chip.active{background:var(--accent);color:#031818;border-color:#0b7f7e}
+    .pill{font-size:11px;padding:3px 8px;border-radius:999px;background:#0b1324;border:1px solid #233147;color:#cbd5e1}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+    .card{border:1px solid var(--ring);border-radius:14px;padding:12px}
+    .ring-ok{box-shadow:0 0 0 1px rgba(16,185,129,.35) inset;background:rgba(16,185,129,.08)}
+    .ring-warn{box-shadow:0 0 0 1px rgba(245,158,11,.35) inset;background:rgba(245,158,11,.08)}
+    .ring-bad{box-shadow:0 0 0 1px rgba(239,68,68,.35) inset;background:rgba(239,68,68,.08)}
+    .title{font-size:14px;font-weight:600;line-height:1.35;margin:0 0 6px}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#cbd5e1}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+    .tag{background:#1f2937;border:1px solid #2b3748;color:#d1d5db;border-radius:8px;padding:2px 8px;font-size:11px;margin:3px}
+    .footer{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:12px;border-top:1px dashed #2b3748;padding-top:10px}
+    .progress{height:6px;background:#1f2937;border-radius:999px;overflow:hidden}
+    .progress>i{display:block;height:100%;background:var(--accent);width:0%}
+    .kbd{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0b1324;border:1px solid #233147;border-bottom-color:#1a2436;border-radius:6px;padding:2px 6px;font-size:11px}
+    .error{background:#2b1111;border:1px solid #6b1b1b;color:#ffb4b4;border-radius:10px;padding:10px;font-size:13px}
+    .mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+    label.map{display:grid;gap:4px;font-size:12px}
+    select, input[type="text"]{width:100%;padding:8px;border-radius:8px;border:1px solid #2b3748;background:#0b1324;color:#e5e7eb}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>كتالوج العلاج الطبيعي — نسخة CSV (بدون تبعيات)</h1>
+    <div class="muted">لو الـHTML القديم ما اشتغل بسبب CDN، هذي نسخة تعتمد فقط على CSV وتشتغل أوفلاين 100%.</div>
+
+    <section class="panel" style="margin-top:12px">
+      <div class="row">
+        <div class="drop" id="drop" style="flex:1">
+          اسحب ملف CSV هنا أو
+          <label class="btn" style="margin-inline:6px; display:inline-block">
+            اختر ملف <input id="file" type="file" accept=".csv,text/csv" hidden>
+          </label>
+          <div class="muted" style="margin-top:8px;font-size:12px">من Excel: حفظ باسم → CSV (UTF-8).</div>
+        </div>
+        <div style="min-width:260px;flex:1">
+          <input id="search" class="search" placeholder="ابحث بالاسم/الكود/الماركة..." />
+          <div class="row" style="margin-top:10px">
+            <div class="progress" style="flex:1"><i id="bar"></i></div>
+            <div id="statusText" class="muted" style="font-size:12px">جاهز</div>
+          </div>
+        </div>
+      </div>
+      <div id="errorBox" class="error" style="display:none;margin-top:10px"></div>
+      <details style="margin-top:10px">
+        <summary class="muted">تعيين الأعمدة (لو العناوين مختلفة)</summary>
+        <div class="mapgrid" id="mapper"></div>
+      </details>
+    </section>
+
+    <section class="panel" style="margin-top:12px">
+      <div class="row" style="gap:6px">
+        <span class="pill">فلترة سريعة:</span>
+        <div id="statusChips" class="row"></div>
+      </div>
+      <div class="row" style="gap:6px;margin-top:6px"><div class="pill">التخصص:</div><div id="facet-specialty" class="row"></div></div>
+      <div class="row" style="gap:6px;margin-top:6px"><div class="pill">الاستخدام:</div><div id="facet-use" class="row"></div></div>
+      <div class="row" style="gap:6px;margin-top:6px"><div class="pill">الفئة:</div><div id="facet-category" class="row"></div></div>
+      <div class="row" style="gap:6px;margin-top:6px"><div class="pill">العضو المصاب:</div><div id="facet-region" class="row"></div></div>
+    </section>
+
+    <section class="panel" style="margin-top:12px">
+      <div class="row" style="justify-content:space-between">
+        <div class="muted">العناصر: <b id="count">0</b> | PT: <b id="count-pt">0</b> | ⚠️: <b id="count-review">0</b> | ❌: <b id="count-nonpt">0</b></div>
+        <div class="muted">نصيحة: اضغط <span class="kbd">Ctrl</span>/<span class="kbd">Cmd</span> مع النقر لتحديد عدة فلاتر.</div>
+      </div>
+      <div id="grid" class="grid" style="margin-top:12px"></div>
+    </section>
+  </div>
+
+  <script>
+  // ===== Helpers =====
+  const el = s => document.querySelector(s);
+  const errorBox = el('#errorBox');
+  function showError(msg){ errorBox.style.display='block'; errorBox.textContent = msg; }
+  function clearError(){ errorBox.style.display='none'; errorBox.textContent=''; }
+  const setProgress = (p, t)=>{ el('#bar').style.width = Math.max(0,Math.min(100,p))+'%'; if(t) el('#statusText').textContent = t; };
+  const escapeHTML = s => String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[m]));
+
+  // ===== CSV Parser (quotes/commas/newlines) =====
+  function parseCSV(text){
+    const rows = []; let row = [], val = '', i = 0, q = false;
+    while (i < text.length){
+      const c = text[i];
+      if (q){
+        if (c === '"'){
+          if (text[i+1] === '"'){ val += '"'; i+=2; continue; }
+          q = false; i++; continue;
+        }
+        val += c; i++; continue;
+      } else {
+        if (c === '"'){ q = true; i++; continue; }
+        if (c === ','){ row.push(val.trim()); val=''; i++; continue; }
+        if (c === '\n'){ row.push(val.trim()); rows.push(row); row=[]; val=''; i++; continue; }
+        if (c === '\r'){ i++; continue; }
+        val += c; i++; continue;
+      }
+    }
+    row.push(val.trim()); rows.push(row);
+    return rows.filter(r=>r.length && r.join('').length);
+  }
+
+  // ===== State =====
+  const state = {
+    headers: [],
+    map: { name:'', category:'', decision:'', score:'', mfr:'', origin:'', model:'', smr:'', price:'' },
+    rawRows: [],
+    items: [],
+    filters: { status:['pt','review','nonpt'], specialty:[], use:[], category:[], region:[] },
+    search: '',
+  };
+
+  // ===== Uploader =====
+  const fileInput = el('#file'), drop = el('#drop');
+  drop.addEventListener('dragover',(e)=>{e.preventDefault(); drop.classList.add('drag');});
+  drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));
+  drop.addEventListener('drop',(e)=>{ e.preventDefault(); drop.classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f) loadCSV(f); });
+  fileInput.addEventListener('change',(e)=>{ const f=e.target.files[0]; if(f) loadCSV(f); });
+
+  async function loadCSV(file){
+    clearError(); setProgress(5,'قراءة CSV...');
+    if(!/\.csv$/i.test(file.name)){ showError('رجاءً CSV فقط. من Excel: حفظ باسم → CSV (UTF-8).'); return; }
+    const text = await file.text();
+    setProgress(15,'تحليل CSV...');
+    const rows = parseCSV(text);
+    if(!rows.length){ showError('الملف فارغ أو غير صالح.'); return; }
+    state.headers = rows[0]; state.rawRows = rows.slice(1);
+    autoMapColumns();
+    renderMapper();
+    setProgress(40,'تطبيع وتحليل...');
+    buildItems();
+    buildFacets();
+    setProgress(100,'جاهز');
+    render();
+  }
+
+  // ===== Column Mapping =====
+  const KNOWN = {
+    name: ['Item Description','ItemDescription','Description','الوصف','العنصر'],
+    category: ['PT_Category','Category','الفئة'],
+    decision: ['Decision','القرار'],
+    score: ['Score','التقييم'],
+    mfr: ['MFR','Manufacturer','المصنع','مصنّع'],
+    origin: ['ORIGIN','Origin','المنشأ','بلد المنشأ'],
+    model: ['Model','موديل','نموذج'],
+    smr: ['SMR code.','SMR','NUPCO','Code','الكود'],
+    price: ['UP .SR','Price','السعر'],
+  };
+  function autoMapColumns(){
+    const h = state.headers.map(x=>x.trim().toLowerCase());
+    for (const key in KNOWN){
+      state.map[key] = '';
+      for (const cand of KNOWN[key]){
+        const idx = h.indexOf(cand.trim().toLowerCase());
+        if (idx !== -1){ state.map[key] = state.headers[idx]; break; }
+      }
+    }
+  }
+  function renderMapper(){
+    const m = el('#mapper'); m.innerHTML='';
+    for (const key of Object.keys(state.map)){
+      const wrap = document.createElement('label'); wrap.className='map';
+      wrap.innerHTML = `<span class="muted">${key}</span>`;
+      const sel = document.createElement('select');
+      sel.innerHTML = `<option value="">—</option>` + state.headers.map(h=>`<option value="${escapeHTML(h)}"${state.map[key]===h?' selected':''}>${escapeHTML(h)}</option>`).join('');
+      sel.onchange = e => { state.map[key] = e.target.value; buildItems(); buildFacets(); render(); };
+      wrap.appendChild(sel); m.appendChild(wrap);
+    }
+  }
+
+  // ===== Normalization / Enrichment =====
+  function rowToObj(arr){
+    const obj = {}; state.headers.forEach((h,i)=> obj[h] = arr[i] || '');
+    return obj;
+  }
+  function val(obj, field){ const col = state.map[field]; return col ? obj[col] : ''; }
+  function num(x){ const n = Number(String(x).replace(/[^\d.\-]/g,'')); return Number.isFinite(n) ? n : NaN; }
+
+  const REGION_DICT = { shoulder:'كتف', wrist:'معصم', hand:'يد', elbow:'مرفق', knee:'ركبة', ankle:'كاحل', foot:'قدم', hip:'ورك', neck:'رقبة', cervical:'عنق', lumbar:'قطني', spine:'عمود فقري' };
+  const SPECIALTY_RULES = [
+    { ar:'عظام', rx:/(orthopedic|splint|brace|sporlastic|theratogs|knee|ankle|wrist|hip|shoulder|spine|cervical|رقبة|عمود|ركب|كاحل|معصم)/i },
+    { ar:'أعصاب', rx:/(neuro|stroke|hemipleg|scapular|balance|gait|vicon|delsys|شلل|توازن|مشية)/i },
+    { ar:'أطفال', rx:/(pediatric|child|youth|xs|x-small|طفل|أطفال)/i },
+    { ar:'رياضي', rx:/(theraband|band|exercise|ball|gloves|exgel|cando|رياض|تمارين)/i },
+    { ar:'كبار سن', rx:/(walker|grab\s?bar|transfer|non slip|dycem|weighted utensils|كبار|مسن|مسنين)/i },
+  ];
+  const USE_RULES = [
+    { ar:'حركة', rx:/(crutch|walker|wheelchair|transfer|grab\s?bar|belt|cushion|عكاز|مشاية|كرسي)/i },
+    { ar:'تقييم', rx:/(assessment|mvpt|dlotca|marker|vicon|delsys|analysis|kit|تقييم|اختبار)/i },
+    { ar:'علاج كهربائي/حراري', rx:/(tens|electrode|ultrasound|heat pack|hydrocollator|حراري|كهربائي)/i },
+    { ar:'تمارين/مقاومة', rx:/(resistance band|theraband|exercise ball|band|dumbbell|تمرين|مقاومة)/i },
+    { ar:'مساعدات نشاط يومي', rx:/(utensils|cup|plate|knife|foam tubing|non slip|dycem|holder|أنشطة|أكل|ملاعق|شرب)/i },
+  ];
+  const CATEGORY_FALLBACK = [
+    { ar:'أدوات الحركة', rx:/(crutch|walker|wheelchair|transfer|grab\s?bar|belt|cushion|عكاز|مشاية|كرسي)/i },
+    { ar:'أدوات التقييم', rx:/(assessment|mvpt|dlotca|marker|vicon|delsys|analysis|kit|تقييم)/i },
+    { ar:'أجهزة العلاج', rx:/(tens|electrode|ultrasound|heat pack|hydrocollator|علاج)/i },
+    { ar:'التمارين/المقاومة', rx:/(resistance|theraband|exercise ball|band|dumbbell|تمرين|مقاومة)/i },
+    { ar:'مساعدات أنشطة يومية', rx:/(utensils|cup|plate|knife|foam tubing|non slip|dycem|holder|أكل|شرب)/i },
+    { ar:'مستهلكات', rx:/(electrode|band|marker|cover|pack|مستهلك)/i },
+  ];
+
+  function deriveRegion(name){
+    const out = new Set(); const low = name.toLowerCase();
+    for(const [en,ar] of Object.entries(REGION_DICT)) if(low.includes(en)) out.add(ar);
+    if(/كتف/.test(name)) out.add('كتف');
+    if(/رسغ|معصم/.test(name)) out.add('معصم');
+    if(/ركب/.test(name)) out.add('ركبة');
+    if(/ورك/.test(name)) out.add('ورك');
+    if(/عنق|رقبة/.test(name)) out.add('رقبة');
+    if(/عمود|فقر/.test(name)) out.add('عمود فقري');
+    return Array.from(out);
+  }
+  function deriveSpecialty(name){ const out=new Set(); for(const r of SPECIALTY_RULES) if(r.rx.test(name)) out.add(r.ar); return Array.from(out).slice(0,2); }
+  function deriveUse(name){ const out=new Set(); for(const r of USE_RULES) if(r.rx.test(name)) out.add(r.ar); return Array.from(out).slice(0,3); }
+  function deriveCategory(item, name){ const out=new Set(); if(item.PT_Category) out.add(item.PT_Category); for(const r of CATEGORY_FALLBACK) if(r.rx.test(name)) out.add(r.ar); return Array.from(out).slice(0,2); }
+
+  function computeStatus(item){
+    const d = String(item.Decision||'').toLowerCase();
+    if(d==='accepted') return 'pt';
+    if(d==='review') return 'review';
+    if(d==='rejected') return 'nonpt';
+    const s = Number(item.Score||0);
+    if(s>=15) return 'pt';
+    if(s<=0) return 'nonpt';
+    return 'review';
+  }
+
+  function buildItems(){
+    try{
+      const mapped = state.rawRows.map(rowToObj).map(obj => ({
+        item_name: val(obj,'name'),
+        PT_Category: val(obj,'category'),
+        Decision: val(obj,'decision'),
+        Score: num(val(obj,'score')),
+        MFR: val(obj,'mfr'),
+        ORIGIN: val(obj,'origin'),
+        Model: val(obj,'model'),
+        SMR: val(obj,'smr'),
+        Price: num(val(obj,'price')),
+      }));
+      state.items = mapped.map(enrich);
+      clearError();
+    }catch(e){ showError('فشل تحويل البيانات: ' + e.message); }
+  }
+
+  function enrich(item){
+    const name = (item.item_name||'').toString();
+    const tags = {
+      specialty: deriveSpecialty(name),
+      use: deriveUse(name),
+      category: deriveCategory(item, name),
+      region: deriveRegion(name),
+    };
+    const status = computeStatus(item);
+    return { raw:item, name, tags, status };
+  }
+
+  // ===== Facets / Filters / Rendering =====
+  const stateFilters = state.filters;
+  function renderChips(containerSel, items, facetKey){
+    const c = el(containerSel); c.innerHTML='';
+    for(const it of items){
+      const b = document.createElement('button');
+      const active = stateFilters.status.includes(it.key);
+      b.className = 'chip ' + (active ? 'active' : '');
+      b.textContent = it.label;
+      b.onclick = (ev)=>{
+        const set = new Set(stateFilters[facetKey]||[]);
+        if (ev.ctrlKey || ev.metaKey) { active ? set.delete(it.key) : set.add(it.key); }
+        else { set.clear(); set.add(it.key); }
+        stateFilters[facetKey] = Array.from(set);
+        if (!stateFilters[facetKey].length) stateFilters[facetKey] = items.map(x=>x.key);
+        render();
+      };
+      c.appendChild(b);
+    }
+  }
+  function renderFacet(containerSel, values, facetKey){
+    const c = el(containerSel); c.innerHTML='';
+    for(const v of values){
+      const b = document.createElement('button');
+      const active = stateFilters[facetKey]?.includes(v);
+      b.className = 'chip ' + (active ? 'active' : '');
+      b.textContent = v;
+      b.onclick = (ev)=>{
+        const set = new Set(stateFilters[facetKey] || []);
+        if (ev.ctrlKey || ev.metaKey){ active ? set.delete(v) : set.add(v); }
+        else { set.clear(); set.add(v); }
+        stateFilters[facetKey] = Array.from(set);
+        render();
+      };
+      c.appendChild(b);
+    }
+  }
+  function buildFacets(){
+    const set = { specialty:new Set(), use:new Set(), category:new Set(), region:new Set() };
+    for(const e of state.items){
+      e.tags.specialty.forEach(t=>set.specialty.add(t));
+      e.tags.use.forEach(t=>set.use.add(t));
+      e.tags.category.forEach(t=>set.category.add(t));
+      e.tags.region.forEach(t=>set.region.add(t));
+    }
+    renderChips('#statusChips',[{key:'pt',label:'علاج طبيعي'},{key:'review',label:'مشكوك فيه'},{key:'nonpt',label:'غير مناسب'}],'status');
+    renderFacet('#facet-specialty', Array.from(set.specialty).sort(), 'specialty');
+    renderFacet('#facet-use', Array.from(set.use).sort(), 'use');
+    renderFacet('#facet-category', Array.from(set.category).sort(), 'category');
+    renderFacet('#facet-region', Array.from(set.region).sort(), 'region');
+  }
+  function passesFilters(e){
+    const f = stateFilters;
+    if(!f.status.includes(e.status)) return false;
+    if(f.specialty?.length && !e.tags.specialty.some(t=>f.specialty.includes(t))) return false;
+    if(f.use?.length && !e.tags.use.some(t=>f.use.includes(t))) return false;
+    if(f.category?.length && !e.tags.category.some(t=>f.category.includes(t))) return false;
+    if(f.region?.length && !e.tags.region.some(t=>f.region.includes(t))) return false;
+    if(state.search){
+      const s = state.search.toLowerCase();
+      const raw = e.name + ' ' + (e.raw.MFR||'') + ' ' + (e.raw.Model||'') + ' ' + (e.raw.SMR||'');
+      if(!raw.toLowerCase().includes(s)) return false;
+    }
+    return true;
+  }
+  function sortNeed(a,b){
+    const w = { pt:0, review:1, nonpt:2 };
+    const sa = w[a.status], sb = w[b.status];
+    if(sa!==sb) return sa - sb;
+    const as = Number(a.raw.Score||0), bs = Number(b.raw.Score||0);
+    if(as!==bs) return bs - as;
+    return a.name.localeCompare(b.name);
+  }
+  function render(){
+    const list = state.items.filter(passesFilters).sort(sortNeed);
+    el('#count').textContent = list.length;
+    el('#count-pt').textContent = list.filter(x=>x.status==='pt').length;
+    el('#count-review').textContent = list.filter(x=>x.status==='review').length;
+    el('#count-nonpt').textContent = list.filter(x=>x.status==='nonpt').length;
+    const grid = el('#grid'); grid.innerHTML='';
+    const frag = document.createDocumentFragment();
+    for(const e of list){
+      const card = document.createElement('div');
+      card.className = 'card ' + (e.status==='pt'?'ring-ok':e.status==='review'?'ring-warn':'ring-bad');
+      const codes = [e.raw.SMR, e.raw.Model].filter(Boolean);
+      card.innerHTML = `
+        <div class="row" style="justify-content:space-between">
+          <h3 class="title">${escapeHTML(e.name||'—')}</h3>
+          <span class="pill">${ e.status==='pt'?'منتج علاج طبيعي': e.status==='review'?'مشكوك فيه':'غير مناسب' }</span>
+        </div>
+        <div class="meta">
+          <div><div class="muted">الأكواد</div><div class="mono">${ codes.length? codes.map(c=>`<div>${escapeHTML(String(c))}</div>`).join('') : '—' }</div></div>
+          <div><div class="muted">الدرجة</div><div>${Number(e.raw.Score||0)}</div></div>
+        </div>
+        <div>${e.tags.specialty.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')} ${e.tags.use.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')} ${e.tags.category.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')} ${e.tags.region.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>
+        <div class="footer">
+          <div class="muted">${e.raw.MFR ? 'المصنّع: <b>'+escapeHTML(e.raw.MFR)+'</b>' : ''} ${e.raw.ORIGIN ? ' | المنشأ: <b>'+escapeHTML(e.raw.ORIGIN)+'</b>' : ''}</div>
+          ${Number.isFinite(e.raw.Price) ? '<div class="muted">السعر: <b>'+e.raw.Price+'</b></div>' : ''}
+        </div>`;
+      frag.appendChild(card);
+    }
+    grid.appendChild(frag);
+  }
+
+  // Search
+  el('#search').addEventListener('input', e => { state.search = e.target.value.trim(); render(); });
+  </script>
+</body>
+</html>

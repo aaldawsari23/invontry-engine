@@ -1,0 +1,4800 @@
+{
+  "version": "2.1",
+  "schema_version": "1.0",
+  "generated_at": "2025-09-12T17:00:21Z",
+  "complete": true,
+  "tag_enum": [
+    "brand",
+    "brand_line",
+    "distributor",
+    "retail",
+    "equipment",
+    "device",
+    "component",
+    "modality",
+    "technique",
+    "assessment",
+    "condition",
+    "consumable",
+    "orthosis",
+    "prosthesis",
+    "mobility",
+    "seating",
+    "ADL",
+    "pediatric",
+    "gait",
+    "post_op"
+  ],
+  "brand_map": {
+    "Chattanooga": [
+      "electrotherapy",
+      "ultrasound",
+      "traction",
+      "heat_therapy"
+    ],
+    "BTL": [
+      "electrotherapy",
+      "ultrasound",
+      "shockwave",
+      "laser",
+      "diathermy"
+    ],
+    "Storz Medical": [
+      "shockwave"
+    ],
+    "Zimmer MedizinSysteme": [
+      "shockwave",
+      "cryotherapy",
+      "laser",
+      "tecar"
+    ],
+    "Enraf-Nonius": [
+      "electrotherapy",
+      "ultrasound",
+      "diathermy"
+    ],
+    "EMS Physio": [
+      "electrotherapy",
+      "ultrasound",
+      "shockwave",
+      "laser"
+    ],
+    "DJO": [
+      "electrotherapy",
+      "ultrasound",
+      "traction",
+      "heat_therapy",
+      "brace",
+      "donjoy"
+    ],
+    "Mettler Electronics": [
+      "electrotherapy",
+      "ultrasound",
+      "laser",
+      "sonicator"
+    ],
+    "Richmar": [
+      "electrotherapy",
+      "ultrasound",
+      "laser",
+      "heat_therapy"
+    ],
+    "DonJoy": [
+      "brace",
+      "orthosis",
+      "support"
+    ],
+    "TheraBand": [
+      "exercise",
+      "band",
+      "resistance"
+    ],
+    "Ottobock": [
+      "prosthetics",
+      "orthosis",
+      "seating",
+      "wheelchair"
+    ],
+    "Össur": [
+      "prosthetics",
+      "orthosis",
+      "brace"
+    ],
+    "Sunrise Medical": [
+      "wheelchair",
+      "seating",
+      "mobility"
+    ],
+    "Invacare": [
+      "wheelchair",
+      "mobility",
+      "seating"
+    ],
+    "Drive Medical": [
+      "walker",
+      "rollator",
+      "wheelchair",
+      "mobility"
+    ],
+    "Mckenzie": [
+      "spine",
+      "mechanical diagnosis",
+      "lumbar roll"
+    ],
+    "Kinesio": [
+      "taping",
+      "kinesiology tape"
+    ],
+    "Mulligan": [
+      "manual therapy",
+      "mobilisation with movement",
+      "snags"
+    ],
+    "Graston": [
+      "iastm",
+      "instrument assisted soft tissue mobilization"
+    ]
+  },
+  "category_rules": {
+    "Modalities": [
+      "tens",
+      "nmes",
+      "fes",
+      "ifc",
+      "ultrasound",
+      "laser",
+      "hilt",
+      "shockwave",
+      "swd",
+      "tecar",
+      "traction",
+      "cryotherapy",
+      "hydrotherapy",
+      "paraffin",
+      "infrared"
+    ],
+    "Equipment & Devices": [
+      "treadmill",
+      "bike",
+      "elliptical",
+      "rower",
+      "ube",
+      "reformer",
+      "trx",
+      "bosu",
+      "foam roller",
+      "pulley",
+      "cable",
+      "finger ladder",
+      "shoulder wheel",
+      "wall bars"
+    ],
+    "Mobility & Transfer Aids": [
+      "wheelchair",
+      "walker",
+      "rollator",
+      "crutches",
+      "cane",
+      "patient lift",
+      "gait belt",
+      "transfer board",
+      "ramp"
+    ],
+    "Daily Living Aids": [
+      "grab bar",
+      "shower chair",
+      "raised toilet seat",
+      "sock aid",
+      "shoe horn",
+      "reacher",
+      "plate guard",
+      "adaptive utensils"
+    ],
+    "Seating & Positioning Equipment": [
+      "wheelchair cushion",
+      "backrest",
+      "headrest",
+      "harness",
+      "lap tray"
+    ],
+    "Robotics & Advanced Systems": [
+      "lokomat",
+      "exoskeleton",
+      "fes",
+      "vr",
+      "robotic"
+    ]
+  },
+  "conditional_includes": [
+    {
+      "term": "ultrasound gel",
+      "require_any": [
+        "therapeutic ultrasound",
+        "1 mhz",
+        "3 mhz",
+        "applicator"
+      ],
+      "block_if_any": [
+        "diagnostic",
+        "ob ultrasound",
+        "transvaginal",
+        "linear array",
+        "curvilinear"
+      ]
+    },
+    {
+      "term": "electrode pad",
+      "require_any": [
+        "tens",
+        "nmes",
+        "ifc",
+        "fes",
+        "electrotherapy"
+      ],
+      "block_if_any": [
+        "ecg",
+        "ekg",
+        "defibrillator",
+        "patient monitor"
+      ]
+    },
+    {
+      "term": "kinesiology tape",
+      "require_any": [
+        "kinesiology",
+        "mcconnell",
+        "therapy"
+      ],
+      "block_if_any": [
+        "wound",
+        "surgical",
+        "dressing",
+        "zinc oxide"
+      ]
+    },
+    {
+      "term": "hot pack",
+      "require_any": [
+        "hydrocollator",
+        "moist heat",
+        "therapy"
+      ],
+      "block_if_any": [
+        "shipping",
+        "specimen",
+        "cooler"
+      ]
+    },
+    {
+      "term": "cold pack",
+      "require_any": [
+        "rehab",
+        "therapy",
+        "cryotherapy",
+        "ice pack"
+      ],
+      "block_if_any": [
+        "vaccine",
+        "specimen",
+        "cooler",
+        "transport"
+      ]
+    },
+    {
+      "term": "gait belt",
+      "require_any": [
+        "gait",
+        "transfer",
+        "rehab"
+      ],
+      "block_if_any": [
+        "fashion",
+        "clothing"
+      ]
+    },
+    {
+      "term": "therapy ball",
+      "require_any": [
+        "swiss ball",
+        "exercise ball",
+        "physio ball",
+        "rehab"
+      ],
+      "block_if_any": [
+        "toy",
+        "kids play",
+        "decor"
+      ]
+    },
+    {
+      "term": "traction belt",
+      "require_any": [
+        "traction",
+        "spinal",
+        "lumbar"
+      ],
+      "block_if_any": [
+        "auto",
+        "vehicle",
+        "seat belt"
+      ]
+    }
+  ],
+  "variant_patterns": {
+    "size": "\\b(XXS|XS|S|M|L|XL|2XL|3XL|صغير|متوسط|كبير|كبير جدا)\\b",
+    "side": "\\b(left|right|bilateral|universal|يمين|يسار)\\b",
+    "age_fit": "\\b(pediatric|adult|bariatric|اطفال|بالغ|بدين)\\b",
+    "color": "\\b(yellow|red|green|blue|black|silver|gold|white|grey|gray|أصفر|أحمر|أخضر|أزرق|أسود|فضي|ذهبي|أبيض|رمادي)\\b",
+    "resistance": "\\b(level|resistance|grade)\\s*(very\\s*light|light|medium|heavy|x\\s*-?heavy|xx\\s*-?heavy|[1-9])\\b",
+    "dimension": "\\b(\\d+(\\.\\d+)?\\s*(cm|mm|m|in|inch|yd|سم|ملم|م))\\b",
+    "pack_uom": "\\b(box|pack|case|pair|dozen|roll|bottle|jar|each|pcs?|زوج|علبة|كرتون|لفة)\\b|x\\s*\\d+"
+  },
+  "dedupe": {
+    "priority_keys": [
+      "sku",
+      "canonical",
+      "brand",
+      "category"
+    ],
+    "language_preference": [
+      "en",
+      "ar"
+    ]
+  },
+  "arabic_aliases": {
+    "wheelchair": [
+      "كرسي متحرك",
+      "كرسي عجلات",
+      "عربة متحركة"
+    ],
+    "walker": [
+      "ووكر",
+      "مِشاية",
+      "مشاية",
+      "ووكر بعجلات",
+      "روليتور"
+    ],
+    "brace": [
+      "دعامة",
+      "مشد",
+      "جبيرة"
+    ],
+    "ultrasound": [
+      "موجات فوق صوتية علاجية"
+    ],
+    "crutches": [
+      "عكاز",
+      "عكاكيز",
+      "عكازات",
+      "عكاز إبطي",
+      "عكاز الساعد"
+    ],
+    "cane": [
+      "عصا مشي",
+      "عصا"
+    ],
+    "goniometer": [
+      "ميزان زاوية",
+      "جونيو ميتر",
+      "جونيوमीटर"
+    ],
+    "dynamometer": [
+      "ديناموميتر",
+      "مقياس قوة القبضة",
+      "قياس قبضة"
+    ],
+    "bosu": [
+      "بوسو",
+      "لوح اتزان",
+      "قرص اتزان"
+    ],
+    "swiss ball": [
+      "كرة سويسرية",
+      "كرة تمارين",
+      "كرة علاجية"
+    ],
+    "pulley": [
+      "بكرة",
+      "بولي",
+      "بكر تمارين"
+    ],
+    "theraband": [
+      "ثيراباند",
+      "شريط مقاومة",
+      "شريط علاجي"
+    ],
+    "hot pack": [
+      "كمادة ساخنة",
+      "حقيبة حرارية",
+      "ساخن رطب"
+    ],
+    "cold pack": [
+      "كمادة باردة",
+      "آيس باك",
+      "حقيبة باردة"
+    ],
+    "kinesiology tape": [
+      "شريط كينيزيو",
+      "شريط علاجي",
+      "ماكونيل"
+    ],
+    "دراجة ثابتة": [
+      "دراجة تمارين"
+    ],
+    "موجات فوق صوتية علاجية": [
+      "التراساوند علاجي"
+    ],
+    "تحفيز كهربائي": [
+      "تنبيه كهربائي"
+    ],
+    "جبيرة": [
+      "مثبت"
+    ]
+  },
+  "sources": {
+    "procurement": [
+      "NUPCO"
+    ],
+    "retail_mena": [
+      "Amazon.sa",
+      "Noon",
+      "Nahdi",
+      "Aldawaa"
+    ]
+  },
+  "engine_config": {
+    "engine_version": "v3-knowledge-pack-integrated",
+    "notes": "Single-file bundle using the comprehensive knowledge pack for analysis. All legacy config files are deprecated.",
+    "config": {
+      "weights": {
+        "tags": {
+          "default": 3,
+          "modality": 25,
+          "equipment": 20,
+          "assessment": 20,
+          "orthosis": 18,
+          "prosthetics": 20,
+          "gait_training": 20,
+          "ADL": 15,
+          "mobility": 15,
+          "seating": 15,
+          "brand": 10,
+          "consumable": 8,
+          "post_op": 5,
+          "neuro": 5,
+          "condition": 2,
+          "technique": 2
+        },
+        "ignore": -50,
+        "diagnostic_blocker": -100
+      },
+      "diagnostic_blockers": [
+        "diagnostic ultrasound",
+        "PACS",
+        "CT scanner",
+        "MRI coil",
+        "angiography",
+        "sonography (diagnostic)",
+        "transvaginal",
+        "endocavitary",
+        "curvilinear probe",
+        "linear array probe",
+        "TEE",
+        "mammography",
+        "OB ultrasound",
+        "vascular ultrasound",
+        "echocardiography",
+        "radiology",
+        "radiography"
+      ],
+      "thresholds": {
+        "accept_min_score": 15,
+        "reject_threshold": -5
+      },
+      "thresholds_by_category": {
+        "Equipment & Devices": 15,
+        "Brands": 15
+      },
+      "variant_patterns": {
+        "size": "\\b(XXS|XS|S|M|L|XL|2XL|3XL|صغير|متوسط|كبير|كبير جدا)\\b",
+        "side": "\\b(left|right|bilateral|universal|يمين|يسار)\\b",
+        "age_fit": "\\b(pediatric|adult|bariatric|اطفال|بالغ|بدين)\\b",
+        "color": "\\b(yellow|red|green|blue|black|silver|gold|white|grey|gray|أصفر|أحمر|أخضر|أزرق|أسود|فضي|ذهبي|أبيض|رمادي)\\b",
+        "resistance": "\\b(level|resistance|grade)\\s*(very\\s*light|light|medium|heavy|x\\s*-?heavy|xx\\s*-?heavy|[1-9])\\b",
+        "dimension": "\\b(\\d+(\\.\\d+)?\\s*(cm|mm|m|in|inch|yd|سم|ملم|م))\\b",
+        "pack_uom": "\\b(box|pack|case|pair|dozen|roll|bottle|jar|each|pcs?|زوج|علبة|كرتون|لفة)\\b|x\\s*\\d+"
+      }
+    },
+    "knowledge_pack": [
+      {
+        "part": 1,
+        "version": "1.0",
+        "generated_at": "2025-09-11T22:57:30Z",
+        "categories": [
+          {
+            "category": "Brands",
+            "subcategories": [
+              {
+                "name": "Global Brands",
+                "keywords": [
+                  {
+                    "canonical": "Chattanooga",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Enraf-Nonius",
+                    "aliases": [
+                      "Enraf Nonius"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "BTL",
+                    "aliases": [
+                      "BTL Industries"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "EMS Physio",
+                    "aliases": [
+                      "EMS UK"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Mettler Electronics",
+                    "aliases": [
+                      "Mettler"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Richmar",
+                    "aliases": [
+                      "Rich-Mar"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Dynatronics",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Zimmer MedizinSysteme",
+                    "aliases": [
+                      "Zimmer",
+                      "Zimmer Medical"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Storz Medical",
+                    "aliases": [
+                      "Storz"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Gymna",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "PHYSIOMED",
+                    "aliases": [
+                      "PhysioMed"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "ITO",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Mectronic",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Whitehall Manufacturing",
+                    "aliases": [
+                      "Whitehall"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Hausmann Industries",
+                    "aliases": [
+                      "Hausmann"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Clinton Industries",
+                    "aliases": [
+                      "Clinton"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "SEERS Medical",
+                    "aliases": [
+                      "Seers Medical"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Armedica",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Oakworks Medical",
+                    "aliases": [
+                      "Oakworks"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Biodex",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Bertec",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "AMTI",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Kistler",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Noraxon",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "GAITRite",
+                    "aliases": [
+                      "GAIT Rite"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Tekscan",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Novel",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Power Plate",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "AlterG",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Hocoma",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Restorative Therapies",
+                    "aliases": [
+                      "RTI"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "BIONIK",
+                    "aliases": [
+                      "Bionik"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Invacare",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Sunrise Medical",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Quickie",
+                    "aliases": [
+                      "Quickie Wheelchairs"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Permobil",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "ROHO",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Pride Mobility",
+                    "aliases": [
+                      "Pride"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Ottobock",
+                    "aliases": [
+                      "Otto Bock"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Ossur",
+                    "aliases": [
+                      "Össur"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Breg",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Aspen Medical Products",
+                    "aliases": [
+                      "Aspen"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Thuasne",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Bauerfeind",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Medi",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Jobst",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Juzo",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Sigvaris",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "TheraBand",
+                    "aliases": [
+                      "Theraband",
+                      "Thera-Band"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Rolyan",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Sammons Preston",
+                    "aliases": [
+                      "Sammons-Preston"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Cramer",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Fabrication Enterprises",
+                    "aliases": [
+                      "FEI"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "CanDo",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Baseline",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Togu",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Compex",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "DJO Global",
+                    "aliases": [
+                      "DJO"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Performance Health",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Regional Distributors",
+                "keywords": [
+                  {
+                    "canonical": "Al Jeel Medical",
+                    "aliases": [
+                      "Al Jeel"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Tamer Group",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Al Faisaliah Medical Systems",
+                    "aliases": [
+                      "FMS",
+                      "Al Faisaliah"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "Gulf Medical Co.",
+                    "aliases": [
+                      "Gulf Medical"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  },
+                  {
+                    "canonical": "International Rehab Group",
+                    "aliases": [
+                      "IRG"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "brand"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "category": "Equipment & Devices",
+            "subcategories": [
+              {
+                "name": "Cardio & Exercise Machines",
+                "keywords": [
+                  {
+                    "canonical": "Treadmill",
+                    "aliases": [
+                      "manual treadmill",
+                      "anti-gravity treadmill",
+                      "AlterG",
+                      "running machine",
+                      "walking treadmill",
+                      "جهاز المشي"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Stationary Bike",
+                    "aliases": [
+                      "exercise bike",
+                      "upright bike",
+                      "recumbent bike",
+                      "spin bike",
+                      "spinning bike",
+                      "cycle ergometer",
+                      "دراجة ثابتة"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Upper Body Ergometer",
+                    "aliases": [
+                      "UBE",
+                      "arm ergometer",
+                      "arm crank ergometer",
+                      "arm bike"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Elliptical Trainer",
+                    "aliases": [
+                      "cross trainer",
+                      "elliptical machine"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Recumbent Stepper",
+                    "aliases": [
+                      "seated stepper",
+                      "NuStep",
+                      "SCIFIT"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Rowing Machine",
+                    "aliases": [
+                      "rower",
+                      "rowing ergometer"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Rehabilitation Training Equipment",
+                "keywords": [
+                  {
+                    "canonical": "Parallel Bars",
+                    "aliases": [
+                      "walking bars",
+                      "rehab bars"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Gait Trainer",
+                    "aliases": [
+                      "body-weight support system",
+                      "BWS system",
+                      "overhead harness",
+                      "LiteGait"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Tilt Table",
+                    "aliases": [
+                      "tilt board"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Standing Frame",
+                    "aliases": [
+                      "standing aid",
+                      "stander"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Therapy Stairs",
+                    "aliases": [
+                      "training stairs",
+                      "rehab stairs",
+                      "stair trainer"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Balance & Stability Equipment",
+                "keywords": [
+                  {
+                    "canonical": "Balance Board",
+                    "aliases": [
+                      "wobble board",
+                      "rocker board"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "BOSU Balance Trainer",
+                    "aliases": [
+                      "BOSU",
+                      "balance trainer dome"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Balance Pad",
+                    "aliases": [
+                      "foam pad",
+                      "stability pad",
+                      "Airex pad"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Balance Disc",
+                    "aliases": [
+                      "balance cushion",
+                      "stability disc"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Mini Trampoline",
+                    "aliases": [
+                      "rebounder"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Vibration Platform",
+                    "aliases": [
+                      "whole body vibration machine",
+                      "Power Plate"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Therapy Gym Equipment",
+                "keywords": [
+                  {
+                    "canonical": "Exercise Pulley System",
+                    "aliases": [
+                      "overdoor pulley",
+                      "shoulder pulley",
+                      "rope and pulley"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Cable Column",
+                    "aliases": [
+                      "lat pulldown machine",
+                      "cable machine",
+                      "pulley weight machine"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Finger Ladder",
+                    "aliases": [
+                      "shoulder ladder"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Shoulder Wheel",
+                    "aliases": [
+                      "shoulder exercise wheel"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Wall Bars",
+                    "aliases": [
+                      "stall bars",
+                      "Swedish ladder"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Suspension Trainer",
+                    "aliases": [
+                      "TRX",
+                      "Redcord",
+                      "Neurac"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Pilates Reformer",
+                    "aliases": [
+                      "Reformer"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Pilates Cadillac",
+                    "aliases": [
+                      "Cadillac table",
+                      "trapeze table"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Pilates Chair",
+                    "aliases": [
+                      "Wunda chair"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Exercise Accessories & Therapy Tools",
+                "keywords": [
+                  {
+                    "canonical": "Resistance Band",
+                    "aliases": [
+                      "exercise band",
+                      "therapy band",
+                      "TheraBand",
+                      "loop band",
+                      "mini band",
+                      "figure-8 band",
+                      "elastic band",
+                      "stretch band",
+                      "شريط علاجي",
+                      "شريط مطاطي"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Resistance Tubing",
+                    "aliases": [
+                      "exercise tubing",
+                      "therapy tubing",
+                      "resistance tube"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Dumbbell",
+                    "aliases": [
+                      "hand weight",
+                      "دمبل"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Kettlebell",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Medicine Ball",
+                    "aliases": [
+                      "med ball",
+                      "slam ball",
+                      "wall ball",
+                      "weighted ball"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Weighted Bar",
+                    "aliases": [
+                      "body bar"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Cuff Weight",
+                    "aliases": [
+                      "ankle weight",
+                      "wrist weight"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Sandbag",
+                    "aliases": [
+                      "sand bag",
+                      "sandbag weight"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Stretching Strap",
+                    "aliases": [
+                      "yoga strap"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Door Anchor",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Ankle Strap",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Foam Roller",
+                    "aliases": [
+                      "half foam roller",
+                      "massage roller"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Massage Roller Stick",
+                    "aliases": [
+                      "roller stick",
+                      "massage stick"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Positioning Bolsters and Wedges",
+                    "aliases": [
+                      "foam wedge",
+                      "positioning wedge",
+                      "positioning bolster",
+                      "bolster",
+                      "cervical roll",
+                      "lumbar roll",
+                      "McKenzie roll",
+                      "pelvic wedge"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Hand Therapy & Finger Exercise Tools",
+                "keywords": [
+                  {
+                    "canonical": "Hand Grip Strengthener",
+                    "aliases": [
+                      "hand exerciser",
+                      "grip strengthener",
+                      "spring hand gripper"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Therapy Putty",
+                    "aliases": [
+                      "TheraPutty",
+                      "exercise putty"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Finger Exerciser",
+                    "aliases": [
+                      "Digi-Flex",
+                      "finger strengthener"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "FlexBar",
+                    "aliases": [
+                      "TheraBand FlexBar",
+                      "flex bar"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Power-Web",
+                    "aliases": [
+                      "hand exercise web"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Pegboard",
+                    "aliases": [
+                      "peg board",
+                      "pegboard puzzle"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Sensory & Pediatric Therapy Aids",
+                "keywords": [
+                  {
+                    "canonical": "Sensory Swing",
+                    "aliases": [
+                      "therapy swing"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Weighted Vest",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Weighted Blanket",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Fidget Tool",
+                    "aliases": [
+                      "fidget toy",
+                      "sensory fidget"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Chewable Aid",
+                    "aliases": [
+                      "chew toy",
+                      "oral sensory chew"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Mirror Therapy Box",
+                    "aliases": [
+                      "mirror box",
+                      "mirror therapy"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Treatment Furniture",
+                "keywords": [
+                  {
+                    "canonical": "Treatment Table",
+                    "aliases": [
+                      "plinth",
+                      "mat table",
+                      "hi-lo table",
+                      "Bobath table",
+                      "bariatric table",
+                      "treatment plinth"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Therapy Mat",
+                    "aliases": [
+                      "exercise mat",
+                      "floor mat"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Mobility & Transfer Aids",
+                "keywords": [
+                  {
+                    "canonical": "Wheelchair",
+                    "aliases": [
+                      "manual wheelchair",
+                      "power wheelchair",
+                      "electric wheelchair",
+                      "tilt-in-space wheelchair",
+                      "ultralight wheelchair",
+                      "standing wheelchair",
+                      "كرسي متحرك",
+                      "عربة متحركة"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Wheelchair Power Assist",
+                    "aliases": [
+                      "power assist device",
+                      "SmartDrive"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Wheelchair Ramp",
+                    "aliases": [
+                      "threshold ramp"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Walker",
+                    "aliases": [
+                      "walking frame",
+                      "standard walker",
+                      "front-wheeled walker",
+                      "rollator",
+                      "knee walker",
+                      "مشاية",
+                      "ووكر"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Crutches",
+                    "aliases": [
+                      "axillary crutches",
+                      "forearm crutches",
+                      "Lofstrand crutches",
+                      "عكاز",
+                      "عكازات"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Cane",
+                    "aliases": [
+                      "walking cane",
+                      "walking stick",
+                      "quad cane",
+                      "tripod cane",
+                      "عصا"
+                    ],
+                    "lang": [
+                      "en",
+                      "ar"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Patient Lift",
+                    "aliases": [
+                      "Hoyer lift",
+                      "floor lift",
+                      "ceiling lift",
+                      "patient hoist",
+                      "lift sling"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Adaptive Stroller",
+                    "aliases": [
+                      "medical stroller",
+                      "special needs stroller"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Gait Belt",
+                    "aliases": [
+                      "transfer belt",
+                      "walking belt"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Transfer Board",
+                    "aliases": [
+                      "slide board",
+                      "transfer slide board"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Daily Living Aids",
+                "keywords": [
+                  {
+                    "canonical": "Grab Bar",
+                    "aliases": [
+                      "bathroom grab bar",
+                      "safety bar"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Raised Toilet Seat",
+                    "aliases": [
+                      "toilet riser",
+                      "elevated toilet seat"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Shower Chair",
+                    "aliases": [
+                      "bath chair"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Commode Chair",
+                    "aliases": [
+                      "commode",
+                      "bedside commode"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Long-Handled Sponge",
+                    "aliases": [
+                      "bathing sponge"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Reacher",
+                    "aliases": [
+                      "grabber",
+                      "reaching aid"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Dressing Stick",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Sock Aid",
+                    "aliases": [
+                      "sock donner"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Button Hook",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Zipper Pull",
+                    "aliases": [
+                      "zip puller",
+                      "zipper aid"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Shoe Horn",
+                    "aliases": [
+                      "long shoehorn"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Adaptive Utensils",
+                    "aliases": [
+                      "weighted utensils",
+                      "built-up utensils"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Plate Guard",
+                    "aliases": [],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Nosey Cup",
+                    "aliases": [
+                      "cut-out cup"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Writing Aid",
+                    "aliases": [
+                      "pen grip",
+                      "writing device"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Slant Board",
+                    "aliases": [
+                      "writing slant board",
+                      "reading slant board"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Seating & Positioning Equipment",
+                "keywords": [
+                  {
+                    "canonical": "Wheelchair Cushion",
+                    "aliases": [
+                      "gel cushion",
+                      "air cushion",
+                      "Roho cushion",
+                      "pressure relief cushion"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Wheelchair Backrest",
+                    "aliases": [
+                      "contoured backrest",
+                      "wheelchair back support"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Lateral Supports",
+                    "aliases": [
+                      "lateral trunk support"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Headrest",
+                    "aliases": [
+                      "head support"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Positioning Harness",
+                    "aliases": [
+                      "chest harness",
+                      "postural harness"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Lap Tray",
+                    "aliases": [
+                      "wheelchair tray",
+                      "therapy tray"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Robotics & Advanced Systems",
+                "keywords": [
+                  {
+                    "canonical": "Virtual Reality Rehab System",
+                    "aliases": [
+                      "VR rehab",
+                      "virtual rehabilitation"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Robotic Gait Trainer",
+                    "aliases": [
+                      "robot-assisted gait",
+                      "exoskeleton",
+                      "Lokomat",
+                      "robotic walking system"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "Robotic Arm Trainer",
+                    "aliases": [
+                      "InMotion ARM",
+                      "robotic arm rehab"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  },
+                  {
+                    "canonical": "FES Cycling System",
+                    "aliases": [
+                      "FES bike",
+                      "RT300"
+                    ],
+                    "lang": [
+                      "en"
+                    ],
+                    "tags": [
+                      "equipment"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ignore_terms": [
+      "scalpel",
+      "suture",
+      "hemostat",
+      "retractor",
+      "bone saw",
+      "electrocautery",
+      "laparoscope",
+      "anesthesia machine",
+      "endotracheal tube",
+      "IV catheter",
+      "x-ray",
+      "radiography",
+      "C-arm",
+      "lead apron",
+      "MRI",
+      "CT scanner",
+      "contrast media",
+      "microscope",
+      "pipette",
+      "centrifuge",
+      "reagent",
+      "culture media",
+      "vacutainer",
+      "speculum",
+      "colposcope",
+      "fetal doppler",
+      "dental chair",
+      "dental handpiece",
+      "amalgam",
+      "orthodontic bracket",
+      "printer paper",
+      "toner cartridge",
+      "stapler",
+      "bleach",
+      "mop bucket",
+      "garbage bag",
+      "ventilator (ICU)",
+      "gastroscope",
+      "colonoscope",
+      "neurosurgery microscope",
+      "pedicle screw",
+      "bone cement",
+      "hip prosthesis (implant)",
+      "knee prosthesis (implant)",
+      "locking plate",
+      "intramedullary nail",
+      "pharmacy",
+      "pharmaceutical",
+      "medication",
+      "drug",
+      "tablet",
+      "capsule",
+      "syrup",
+      "ointment",
+      "cream (pharmacy)",
+      "injectable",
+      "vial",
+      "ampoule",
+      "IV fluid",
+      "antibiotic",
+      "vaccine",
+      "chemotherapy drug",
+      "insulin",
+      "statin",
+      "antihypertensive"
+    ]
+  },
+  "changelog": [
+    {
+      "date": "2025-09-12",
+      "notes": "Self-contained v2.1: add IDs, enums, rules, dedupe, Arabic aliases, distributor tag fixes, thresholds alignment."
+    }
+  ],
+  "categories": [
+    {
+      "category": "Brands",
+      "subcategories": [
+        {
+          "name": "Global Brands",
+          "keywords": [
+            {
+              "canonical": "Chattanooga",
+              "aliases": [
+                "شاتانوغا"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.chattanooga"
+            },
+            {
+              "canonical": "Enraf-Nonius",
+              "aliases": [
+                "Enraf Nonius"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.enraf-nonius"
+            },
+            {
+              "canonical": "BTL",
+              "aliases": [
+                "BTL Industries"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.btl"
+            },
+            {
+              "canonical": "EMS Physio",
+              "aliases": [
+                "EMS UK"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.ems-physio"
+            },
+            {
+              "canonical": "Mettler Electronics",
+              "aliases": [
+                "Mettler"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.mettler-electronics"
+            },
+            {
+              "canonical": "Richmar",
+              "aliases": [
+                "Rich-Mar"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.richmar"
+            },
+            {
+              "canonical": "Dynatronics",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.dynatronics"
+            },
+            {
+              "canonical": "Zimmer MedizinSysteme",
+              "aliases": [
+                "Zimmer",
+                "Zimmer Medical"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.zimmer-medizinsysteme"
+            },
+            {
+              "canonical": "Storz Medical",
+              "aliases": [
+                "Storz"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.storz-medical"
+            },
+            {
+              "canonical": "Gymna",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.gymna"
+            },
+            {
+              "canonical": "PHYSIOMED",
+              "aliases": [
+                "PhysioMed"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.physiomed"
+            },
+            {
+              "canonical": "ITO",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.ito"
+            },
+            {
+              "canonical": "Mectronic",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.mectronic"
+            },
+            {
+              "canonical": "Whitehall Manufacturing",
+              "aliases": [
+                "Whitehall"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.whitehall-manufacturing"
+            },
+            {
+              "canonical": "Hausmann Industries",
+              "aliases": [
+                "Hausmann"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.hausmann-industries"
+            },
+            {
+              "canonical": "Clinton Industries",
+              "aliases": [
+                "Clinton"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.clinton-industries"
+            },
+            {
+              "canonical": "SEERS Medical",
+              "aliases": [
+                "Seers Medical"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.seers-medical"
+            },
+            {
+              "canonical": "Armedica",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.armedica"
+            },
+            {
+              "canonical": "Oakworks Medical",
+              "aliases": [
+                "Oakworks"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.oakworks-medical"
+            },
+            {
+              "canonical": "Biodex",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.biodex"
+            },
+            {
+              "canonical": "Bertec",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.bertec"
+            },
+            {
+              "canonical": "AMTI",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.amti"
+            },
+            {
+              "canonical": "Kistler",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.kistler"
+            },
+            {
+              "canonical": "Noraxon",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.noraxon"
+            },
+            {
+              "canonical": "GAITRite",
+              "aliases": [
+                "GAIT Rite"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.gaitrite"
+            },
+            {
+              "canonical": "Tekscan",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.tekscan"
+            },
+            {
+              "canonical": "Novel",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.novel"
+            },
+            {
+              "canonical": "Power Plate",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.power-plate"
+            },
+            {
+              "canonical": "AlterG",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.alterg"
+            },
+            {
+              "canonical": "Hocoma",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.hocoma"
+            },
+            {
+              "canonical": "Restorative Therapies",
+              "aliases": [
+                "RTI"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.restorative-therapies"
+            },
+            {
+              "canonical": "BIONIK",
+              "aliases": [
+                "Bionik"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.bionik"
+            },
+            {
+              "canonical": "Invacare",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.invacare"
+            },
+            {
+              "canonical": "Sunrise Medical",
+              "aliases": [
+                "صن رايز ميديكال"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.sunrise-medical"
+            },
+            {
+              "canonical": "Quickie",
+              "aliases": [
+                "Quickie Wheelchairs"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand",
+                "brand_line"
+              ],
+              "id": "cat.brands.sub.global-brands.quickie",
+              "parent_brand": "Sunrise Medical"
+            },
+            {
+              "canonical": "Permobil",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.permobil"
+            },
+            {
+              "canonical": "ROHO",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.roho"
+            },
+            {
+              "canonical": "Pride Mobility",
+              "aliases": [
+                "Pride"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.pride-mobility"
+            },
+            {
+              "canonical": "Ottobock",
+              "aliases": [
+                "Otto Bock"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.ottobock"
+            },
+            {
+              "canonical": "Össur",
+              "aliases": [
+                "Össur",
+                "Ossur"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.ossur"
+            },
+            {
+              "canonical": "Breg",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.breg"
+            },
+            {
+              "canonical": "Aspen Medical Products",
+              "aliases": [
+                "Aspen"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.aspen-medical-products"
+            },
+            {
+              "canonical": "Thuasne",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.thuasne"
+            },
+            {
+              "canonical": "Bauerfeind",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.bauerfeind"
+            },
+            {
+              "canonical": "Medi",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.medi"
+            },
+            {
+              "canonical": "Jobst",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.jobst"
+            },
+            {
+              "canonical": "Juzo",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.juzo"
+            },
+            {
+              "canonical": "Sigvaris",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.sigvaris"
+            },
+            {
+              "canonical": "TheraBand",
+              "aliases": [
+                "Thera-Band",
+                "Theraband",
+                "ثيراباند"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.theraband"
+            },
+            {
+              "canonical": "Rolyan",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.rolyan"
+            },
+            {
+              "canonical": "Sammons Preston",
+              "aliases": [
+                "Sammons-Preston"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.sammons-preston"
+            },
+            {
+              "canonical": "Cramer",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.cramer"
+            },
+            {
+              "canonical": "Fabrication Enterprises",
+              "aliases": [
+                "FEI"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.fabrication-enterprises"
+            },
+            {
+              "canonical": "CanDo",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.cando"
+            },
+            {
+              "canonical": "Baseline",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.baseline"
+            },
+            {
+              "canonical": "Togu",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.togu"
+            },
+            {
+              "canonical": "Compex",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.compex"
+            },
+            {
+              "canonical": "DJO Global",
+              "aliases": [
+                "DJO"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.djo-global"
+            },
+            {
+              "canonical": "Performance Health",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "brand"
+              ],
+              "id": "cat.brands.sub.global-brands.performance-health"
+            }
+          ],
+          "id": "cat.brands.sub.global-brands"
+        },
+        {
+          "name": "Regional Distributors",
+          "keywords": [
+            {
+              "canonical": "Al Jeel Medical",
+              "aliases": [
+                "Al Jeel"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "distributor"
+              ],
+              "id": "cat.brands.sub.regional-distributors.al-jeel-medical"
+            },
+            {
+              "canonical": "Tamer Group",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "distributor"
+              ],
+              "id": "cat.brands.sub.regional-distributors.tamer-group"
+            },
+            {
+              "canonical": "Al Faisaliah Medical Systems",
+              "aliases": [
+                "FMS",
+                "Al Faisaliah"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "distributor"
+              ],
+              "id": "cat.brands.sub.regional-distributors.al-faisaliah-medical-systems"
+            },
+            {
+              "canonical": "Gulf Medical Co.",
+              "aliases": [
+                "Gulf Medical"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "distributor"
+              ],
+              "id": "cat.brands.sub.regional-distributors.gulf-medical-co"
+            },
+            {
+              "canonical": "International Rehab Group",
+              "aliases": [
+                "IRG"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "distributor"
+              ],
+              "id": "cat.brands.sub.regional-distributors.international-rehab-group"
+            }
+          ],
+          "id": "cat.brands.sub.regional-distributors"
+        }
+      ],
+      "id": "cat.brands"
+    },
+    {
+      "category": "Equipment & Devices",
+      "subcategories": [
+        {
+          "name": "Cardio & Exercise Machines",
+          "keywords": [
+            {
+              "canonical": "Treadmill",
+              "aliases": [
+                "AlterG",
+                "anti-gravity treadmill",
+                "manual treadmill",
+                "running machine",
+                "walking treadmill",
+                "جهاز المشي"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.cardio-and-exercise-machines.treadmill"
+            },
+            {
+              "canonical": "Stationary Bike",
+              "aliases": [
+                "exercise bike",
+                "upright bike",
+                "recumbent bike",
+                "spin bike",
+                "spinning bike",
+                "cycle ergometer",
+                "دراجة ثابتة"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.cardio-and-exercise-machines.stationary-bike"
+            },
+            {
+              "canonical": "Upper Body Ergometer",
+              "aliases": [
+                "UBE",
+                "arm ergometer",
+                "arm crank ergometer",
+                "arm bike"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.cardio-and-exercise-machines.upper-body-ergometer"
+            },
+            {
+              "canonical": "Elliptical Trainer",
+              "aliases": [
+                "cross trainer",
+                "elliptical machine"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.cardio-and-exercise-machines.elliptical-trainer"
+            },
+            {
+              "canonical": "Recumbent Stepper",
+              "aliases": [
+                "seated stepper",
+                "NuStep",
+                "SCIFIT"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.cardio-and-exercise-machines.recumbent-stepper"
+            },
+            {
+              "canonical": "Rowing Machine",
+              "aliases": [
+                "rower",
+                "rowing ergometer"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.cardio-and-exercise-machines.rowing-machine"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.cardio-and-exercise-machines"
+        },
+        {
+          "name": "Rehabilitation Training Equipment",
+          "keywords": [
+            {
+              "canonical": "Parallel Bars",
+              "aliases": [
+                "walking bars",
+                "rehab bars"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.rehabilitation-training-equipment.parallel-bars"
+            },
+            {
+              "canonical": "Gait Trainer",
+              "aliases": [
+                "body-weight support system",
+                "BWS system",
+                "overhead harness",
+                "LiteGait"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.rehabilitation-training-equipment.gait-trainer"
+            },
+            {
+              "canonical": "Tilt Table",
+              "aliases": [
+                "tilt board"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.rehabilitation-training-equipment.tilt-table"
+            },
+            {
+              "canonical": "Standing Frame",
+              "aliases": [
+                "standing aid",
+                "stander"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.rehabilitation-training-equipment.standing-frame"
+            },
+            {
+              "canonical": "Therapy Stairs",
+              "aliases": [
+                "training stairs",
+                "rehab stairs",
+                "stair trainer"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.rehabilitation-training-equipment.therapy-stairs"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.rehabilitation-training-equipment"
+        },
+        {
+          "name": "Balance & Stability Equipment",
+          "keywords": [
+            {
+              "canonical": "Balance Board",
+              "aliases": [
+                "wobble board",
+                "rocker board"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.balance-and-stability-equipment.balance-board"
+            },
+            {
+              "canonical": "BOSU Balance Trainer",
+              "aliases": [
+                "BOSU",
+                "balance trainer dome"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.balance-and-stability-equipment.bosu-balance-trainer"
+            },
+            {
+              "canonical": "Balance Pad",
+              "aliases": [
+                "foam pad",
+                "stability pad",
+                "Airex pad"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.balance-and-stability-equipment.balance-pad"
+            },
+            {
+              "canonical": "Balance Disc",
+              "aliases": [
+                "balance cushion",
+                "stability disc"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.balance-and-stability-equipment.balance-disc"
+            },
+            {
+              "canonical": "Mini Trampoline",
+              "aliases": [
+                "rebounder"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.balance-and-stability-equipment.mini-trampoline"
+            },
+            {
+              "canonical": "Vibration Platform",
+              "aliases": [
+                "whole body vibration machine",
+                "Power Plate"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.balance-and-stability-equipment.vibration-platform"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.balance-and-stability-equipment"
+        },
+        {
+          "name": "Therapy Gym Equipment",
+          "keywords": [
+            {
+              "canonical": "Exercise Pulley System",
+              "aliases": [
+                "overdoor pulley",
+                "shoulder pulley",
+                "rope and pulley"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.exercise-pulley-system"
+            },
+            {
+              "canonical": "Cable Column",
+              "aliases": [
+                "lat pulldown machine",
+                "cable machine",
+                "pulley weight machine"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.cable-column"
+            },
+            {
+              "canonical": "Finger Ladder",
+              "aliases": [
+                "shoulder ladder"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.finger-ladder"
+            },
+            {
+              "canonical": "Shoulder Wheel",
+              "aliases": [
+                "shoulder exercise wheel"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.shoulder-wheel"
+            },
+            {
+              "canonical": "Wall Bars",
+              "aliases": [
+                "stall bars",
+                "Swedish ladder"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.wall-bars"
+            },
+            {
+              "canonical": "Suspension Trainer",
+              "aliases": [
+                "TRX",
+                "Redcord",
+                "Neurac"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.suspension-trainer"
+            },
+            {
+              "canonical": "Pilates Reformer",
+              "aliases": [
+                "Reformer"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.pilates-reformer"
+            },
+            {
+              "canonical": "Pilates Cadillac",
+              "aliases": [
+                "Cadillac table",
+                "trapeze table"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.pilates-cadillac"
+            },
+            {
+              "canonical": "Pilates Chair",
+              "aliases": [
+                "Wunda chair"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.therapy-gym-equipment.pilates-chair"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.therapy-gym-equipment"
+        },
+        {
+          "name": "Exercise Accessories & Therapy Tools",
+          "keywords": [
+            {
+              "canonical": "Resistance Band",
+              "aliases": [
+                "exercise band",
+                "therapy band",
+                "TheraBand",
+                "loop band",
+                "mini band",
+                "figure-8 band",
+                "elastic band",
+                "stretch band",
+                "شريط علاجي",
+                "شريط مطاطي"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.resistance-band"
+            },
+            {
+              "canonical": "Resistance Tubing",
+              "aliases": [
+                "exercise tubing",
+                "therapy tubing",
+                "resistance tube"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.resistance-tubing"
+            },
+            {
+              "canonical": "Dumbbell",
+              "aliases": [
+                "hand weight",
+                "دمبل"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.dumbbell"
+            },
+            {
+              "canonical": "Kettlebell",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.kettlebell"
+            },
+            {
+              "canonical": "Medicine Ball",
+              "aliases": [
+                "med ball",
+                "slam ball",
+                "wall ball",
+                "weighted ball"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.medicine-ball"
+            },
+            {
+              "canonical": "Weighted Bar",
+              "aliases": [
+                "body bar"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.weighted-bar"
+            },
+            {
+              "canonical": "Cuff Weight",
+              "aliases": [
+                "ankle weight",
+                "wrist weight"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.cuff-weight"
+            },
+            {
+              "canonical": "Sandbag",
+              "aliases": [
+                "sand bag",
+                "sandbag weight"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.sandbag"
+            },
+            {
+              "canonical": "Stretching Strap",
+              "aliases": [
+                "yoga strap"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.stretching-strap"
+            },
+            {
+              "canonical": "Door Anchor",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.door-anchor"
+            },
+            {
+              "canonical": "Ankle Strap",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.ankle-strap"
+            },
+            {
+              "canonical": "Foam Roller",
+              "aliases": [
+                "half foam roller",
+                "massage roller"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.foam-roller"
+            },
+            {
+              "canonical": "Massage Roller Stick",
+              "aliases": [
+                "roller stick",
+                "massage stick"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.massage-roller-stick"
+            },
+            {
+              "canonical": "Positioning Bolsters and Wedges",
+              "aliases": [
+                "foam wedge",
+                "positioning wedge",
+                "positioning bolster",
+                "bolster",
+                "cervical roll",
+                "lumbar roll",
+                "McKenzie roll",
+                "pelvic wedge"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools.positioning-bolsters-and-wedges"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.exercise-accessories-and-therapy-tools"
+        },
+        {
+          "name": "Hand Therapy & Finger Exercise Tools",
+          "keywords": [
+            {
+              "canonical": "Hand Grip Strengthener",
+              "aliases": [
+                "hand exerciser",
+                "grip strengthener",
+                "spring hand gripper"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.hand-therapy-and-finger-exercise-tools.hand-grip-strengthener"
+            },
+            {
+              "canonical": "Therapy Putty",
+              "aliases": [
+                "TheraPutty",
+                "exercise putty"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.hand-therapy-and-finger-exercise-tools.therapy-putty"
+            },
+            {
+              "canonical": "Finger Exerciser",
+              "aliases": [
+                "Digi-Flex",
+                "finger strengthener"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.hand-therapy-and-finger-exercise-tools.finger-exerciser"
+            },
+            {
+              "canonical": "FlexBar",
+              "aliases": [
+                "TheraBand FlexBar",
+                "flex bar"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.hand-therapy-and-finger-exercise-tools.flexbar"
+            },
+            {
+              "canonical": "Power-Web",
+              "aliases": [
+                "hand exercise web"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.hand-therapy-and-finger-exercise-tools.power-web"
+            },
+            {
+              "canonical": "Pegboard",
+              "aliases": [
+                "peg board",
+                "pegboard puzzle"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.hand-therapy-and-finger-exercise-tools.pegboard"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.hand-therapy-and-finger-exercise-tools"
+        },
+        {
+          "name": "Sensory & Pediatric Therapy Aids",
+          "keywords": [
+            {
+              "canonical": "Sensory Swing",
+              "aliases": [
+                "therapy swing"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.sensory-and-pediatric-therapy-aids.sensory-swing"
+            },
+            {
+              "canonical": "Weighted Vest",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.sensory-and-pediatric-therapy-aids.weighted-vest"
+            },
+            {
+              "canonical": "Weighted Blanket",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.sensory-and-pediatric-therapy-aids.weighted-blanket"
+            },
+            {
+              "canonical": "Fidget Tool",
+              "aliases": [
+                "fidget toy",
+                "sensory fidget"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.sensory-and-pediatric-therapy-aids.fidget-tool"
+            },
+            {
+              "canonical": "Chewable Aid",
+              "aliases": [
+                "chew toy",
+                "oral sensory chew"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.sensory-and-pediatric-therapy-aids.chewable-aid"
+            },
+            {
+              "canonical": "Mirror Therapy Box",
+              "aliases": [
+                "mirror box",
+                "mirror therapy"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.sensory-and-pediatric-therapy-aids.mirror-therapy-box"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.sensory-and-pediatric-therapy-aids"
+        },
+        {
+          "name": "Treatment Furniture",
+          "keywords": [
+            {
+              "canonical": "Treatment Table",
+              "aliases": [
+                "plinth",
+                "mat table",
+                "hi-lo table",
+                "Bobath table",
+                "bariatric table",
+                "treatment plinth"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.treatment-furniture.treatment-table"
+            },
+            {
+              "canonical": "Therapy Mat",
+              "aliases": [
+                "exercise mat",
+                "floor mat"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.treatment-furniture.therapy-mat"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.treatment-furniture"
+        },
+        {
+          "name": "Mobility & Transfer Aids",
+          "keywords": [
+            {
+              "canonical": "Wheelchair",
+              "aliases": [
+                "electric wheelchair",
+                "manual wheelchair",
+                "power wheelchair",
+                "standing wheelchair",
+                "tilt-in-space wheelchair",
+                "ultralight wheelchair",
+                "عربة متحركة",
+                "كرسي متحرك"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.wheelchair"
+            },
+            {
+              "canonical": "Wheelchair Power Assist",
+              "aliases": [
+                "power assist device",
+                "SmartDrive"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.wheelchair-power-assist"
+            },
+            {
+              "canonical": "Wheelchair Ramp",
+              "aliases": [
+                "threshold ramp"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.wheelchair-ramp"
+            },
+            {
+              "canonical": "Walker",
+              "aliases": [
+                "front-wheeled walker",
+                "knee walker",
+                "rollator",
+                "standard walker",
+                "walking frame",
+                "مشاية",
+                "ووكر"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.walker"
+            },
+            {
+              "canonical": "Crutches",
+              "aliases": [
+                "Lofstrand crutches",
+                "axillary crutches",
+                "forearm crutches",
+                "عكاز",
+                "عكازات"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.crutches"
+            },
+            {
+              "canonical": "Cane",
+              "aliases": [
+                "quad cane",
+                "tripod cane",
+                "walking cane",
+                "walking stick",
+                "عصا"
+              ],
+              "lang": [
+                "ar",
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.cane"
+            },
+            {
+              "canonical": "Patient Lift",
+              "aliases": [
+                "Hoyer lift",
+                "floor lift",
+                "ceiling lift",
+                "patient hoist",
+                "lift sling"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.patient-lift"
+            },
+            {
+              "canonical": "Adaptive Stroller",
+              "aliases": [
+                "medical stroller",
+                "special needs stroller"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.adaptive-stroller"
+            },
+            {
+              "canonical": "Gait Belt",
+              "aliases": [
+                "transfer belt",
+                "walking belt"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.gait-belt"
+            },
+            {
+              "canonical": "Transfer Board",
+              "aliases": [
+                "slide board",
+                "transfer slide board"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids.transfer-board"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.mobility-and-transfer-aids"
+        },
+        {
+          "name": "Daily Living Aids",
+          "keywords": [
+            {
+              "canonical": "Grab Bar",
+              "aliases": [
+                "bathroom grab bar",
+                "safety bar"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.grab-bar"
+            },
+            {
+              "canonical": "Raised Toilet Seat",
+              "aliases": [
+                "toilet riser",
+                "elevated toilet seat"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.raised-toilet-seat"
+            },
+            {
+              "canonical": "Shower Chair",
+              "aliases": [
+                "bath chair"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.shower-chair"
+            },
+            {
+              "canonical": "Commode Chair",
+              "aliases": [
+                "commode",
+                "bedside commode"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.commode-chair"
+            },
+            {
+              "canonical": "Long-Handled Sponge",
+              "aliases": [
+                "bathing sponge"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.long-handled-sponge"
+            },
+            {
+              "canonical": "Reacher",
+              "aliases": [
+                "grabber",
+                "reaching aid"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.reacher"
+            },
+            {
+              "canonical": "Dressing Stick",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.dressing-stick"
+            },
+            {
+              "canonical": "Sock Aid",
+              "aliases": [
+                "sock donner"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.sock-aid"
+            },
+            {
+              "canonical": "Button Hook",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.button-hook"
+            },
+            {
+              "canonical": "Zipper Pull",
+              "aliases": [
+                "zip puller",
+                "zipper aid"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.zipper-pull"
+            },
+            {
+              "canonical": "Shoe Horn",
+              "aliases": [
+                "long shoehorn"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.shoe-horn"
+            },
+            {
+              "canonical": "Adaptive Utensils",
+              "aliases": [
+                "weighted utensils",
+                "built-up utensils"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.adaptive-utensils"
+            },
+            {
+              "canonical": "Plate Guard",
+              "aliases": [],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.plate-guard"
+            },
+            {
+              "canonical": "Nosey Cup",
+              "aliases": [
+                "cut-out cup"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.nosey-cup"
+            },
+            {
+              "canonical": "Writing Aid",
+              "aliases": [
+                "pen grip",
+                "writing device"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.writing-aid"
+            },
+            {
+              "canonical": "Slant Board",
+              "aliases": [
+                "writing slant board",
+                "reading slant board"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.daily-living-aids.slant-board"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.daily-living-aids"
+        },
+        {
+          "name": "Seating & Positioning Equipment",
+          "keywords": [
+            {
+              "canonical": "Wheelchair Cushion",
+              "aliases": [
+                "gel cushion",
+                "air cushion",
+                "Roho cushion",
+                "pressure relief cushion"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.seating-and-positioning-equipment.wheelchair-cushion"
+            },
+            {
+              "canonical": "Wheelchair Backrest",
+              "aliases": [
+                "contoured backrest",
+                "wheelchair back support"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.seating-and-positioning-equipment.wheelchair-backrest"
+            },
+            {
+              "canonical": "Lateral Supports",
+              "aliases": [
+                "lateral trunk support"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.seating-and-positioning-equipment.lateral-supports"
+            },
+            {
+              "canonical": "Headrest",
+              "aliases": [
+                "head support"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.seating-and-positioning-equipment.headrest"
+            },
+            {
+              "canonical": "Positioning Harness",
+              "aliases": [
+                "chest harness",
+                "postural harness"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.seating-and-positioning-equipment.positioning-harness"
+            },
+            {
+              "canonical": "Lap Tray",
+              "aliases": [
+                "wheelchair tray",
+                "therapy tray"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.seating-and-positioning-equipment.lap-tray"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.seating-and-positioning-equipment"
+        },
+        {
+          "name": "Robotics & Advanced Systems",
+          "keywords": [
+            {
+              "canonical": "Virtual Reality Rehab System",
+              "aliases": [
+                "VR rehab",
+                "virtual rehabilitation"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.robotics-and-advanced-systems.virtual-reality-rehab-system"
+            },
+            {
+              "canonical": "Robotic Gait Trainer",
+              "aliases": [
+                "robot-assisted gait",
+                "exoskeleton",
+                "Lokomat",
+                "robotic walking system"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.robotics-and-advanced-systems.robotic-gait-trainer"
+            },
+            {
+              "canonical": "Robotic Arm Trainer",
+              "aliases": [
+                "InMotion ARM",
+                "robotic arm rehab"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.robotics-and-advanced-systems.robotic-arm-trainer"
+            },
+            {
+              "canonical": "FES Cycling System",
+              "aliases": [
+                "FES bike",
+                "RT300"
+              ],
+              "lang": [
+                "en"
+              ],
+              "tags": [
+                "equipment"
+              ],
+              "id": "cat.equipment-and-devices.sub.robotics-and-advanced-systems.fes-cycling-system"
+            }
+          ],
+          "id": "cat.equipment-and-devices.sub.robotics-and-advanced-systems"
+        }
+      ],
+      "id": "cat.equipment-and-devices"
+    }
+  ],
+  "synonyms": [
+    {
+      "canonical": "theraband",
+      "aliases": [
+        "resistance band",
+        "exercise band",
+        "شريط مقاومة",
+        "ثيراباند",
+        "شريط علاجي"
+      ]
+    },
+    {
+      "canonical": "balance board",
+      "aliases": [
+        "BOSU",
+        "لوح اتزان",
+        "قرص اتزان",
+        "بوسو"
+      ]
+    },
+    {
+      "canonical": "swiss ball",
+      "aliases": [
+        "therapy ball",
+        "exercise ball",
+        "كرة سويسرية",
+        "كرة تمارين"
+      ]
+    },
+    {
+      "canonical": "goniometer",
+      "aliases": [
+        "ميزان زاوية",
+        "جونيو ميتر",
+        "جونيوमीटर"
+      ]
+    },
+    {
+      "canonical": "hand dynamometer",
+      "aliases": [
+        "grip dynamometer",
+        "مقياس قوة القبضة",
+        "ديناموميتر"
+      ]
+    },
+    {
+      "canonical": "kinesiology tape",
+      "aliases": [
+        "كينيزيو تيب",
+        "شريط كينيزيو",
+        "ماكونيل",
+        "McConnell tape"
+      ]
+    },
+    {
+      "canonical": "parallel bars",
+      "aliases": [
+        "متوازي",
+        "موازٍ"
+      ]
+    }
+  ]
+}

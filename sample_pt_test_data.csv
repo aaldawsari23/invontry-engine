@@ -1,0 +1,16 @@
+item_name,description,category,manufacturer,sku
+WHEELCHAIR BARIATRIC,Heavy duty wheelchair for larger patients,Mobility Aids,Invacare,WC-001
+CHAIR STAIR,Patient transport chair for stairs,Transfer Equipment,Stryker,CS-002
+TREADMILL REHABILITATION,Medical grade treadmill for PT,Exercise Equipment,HUR,TM-003
+TENS UNIT PORTABLE,Transcutaneous electrical nerve stimulator,Electrotherapy,Chattanooga,TENS-004
+GONIOMETER PLASTIC,Range of motion measurement tool,Assessment Tools,Baseline,GONIO-005
+MASSAGE TABLE ELECTRIC,Adjustable treatment table,Treatment Tables,Oakworks,MT-006
+ULTRASOUND CARDIAC HANDHELD,Portable cardiac ultrasound device,Diagnostic Equipment,GE Healthcare,US-007
+VENTILATOR TRANSPORT,Portable ventilator for patient transport,Respiratory Equipment,Hamilton Medical,VENT-008
+CT SCANNER HEAD,Computed tomography scanner,Imaging Equipment,Siemens,CT-009
+SURGICAL INSTRUMENTS SET,Complete surgical instrument kit,Surgical Equipment,Aesculap,SURG-010
+WHEELCHAIR COMMODE,Wheelchair with built-in commode,Mobility Aids,Drive Medical,WCC-011
+EXERCISE BIKE THERAPEUTIC,Stationary bike for rehabilitation,Exercise Equipment,SciFit,EB-012
+AMBULANCE VEHICLE 4X4,Emergency ambulance vehicle,Emergency Vehicle,Mercedes,AMB-013
+RESISTANCE BANDS SET,Elastic exercise bands for therapy,Exercise Equipment,TheraBand,RB-014
+DEFIBRILLATOR AED,Automated external defibrillator,Emergency Equipment,Zoll,AED-015
